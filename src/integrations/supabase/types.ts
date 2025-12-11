@@ -137,6 +137,7 @@ export type Database = {
           featured: boolean | null
           id: string
           language: string | null
+          pdf_url: string | null
           subcategory: string | null
           title: string
           title_hindi: string | null
@@ -153,6 +154,7 @@ export type Database = {
           featured?: boolean | null
           id?: string
           language?: string | null
+          pdf_url?: string | null
           subcategory?: string | null
           title: string
           title_hindi?: string | null
@@ -169,6 +171,7 @@ export type Database = {
           featured?: boolean | null
           id?: string
           language?: string | null
+          pdf_url?: string | null
           subcategory?: string | null
           title?: string
           title_hindi?: string | null
