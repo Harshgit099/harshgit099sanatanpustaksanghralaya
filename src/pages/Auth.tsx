@@ -91,7 +91,7 @@ const Auth = () => {
             toast.error(error.message);
           }
         } else {
-          toast.success('Account created successfully! Welcome to Sanatan Pustak.');
+          toast.success('Account created successfully! Welcome to Sanatan Pustak Sanghralay.');
           navigate('/');
         }
       }

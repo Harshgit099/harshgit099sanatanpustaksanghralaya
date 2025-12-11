@@ -28,7 +28,7 @@ const Footer = () => {
             <Link to="/" className="flex items-center gap-3 mb-4">
               <span className="text-4xl om-symbol">ॐ</span>
               <div>
-                <h3 className="font-display text-xl font-bold">Sanatan Pustak</h3>
+                <h3 className="font-display text-xl font-bold">Sanatan Pustak Sanghralay</h3>
                 <p className="text-sm text-muted-foreground font-devanagari">सनातन पुस्तक संग्रहालय</p>
               </div>
             </Link>
