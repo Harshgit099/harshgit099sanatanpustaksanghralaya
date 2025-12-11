@@ -41,7 +41,7 @@ const HeroSection = () => {
 
           {/* Main Heading */}
           <h1 className="font-display text-4xl sm:text-5xl lg:text-7xl font-bold mb-4 opacity-0 animate-fade-in-up animation-delay-100">
-            <span className="gradient-text">Sanatan Pustak</span>
+            <span className="gradient-text">Sanatan Pustak Sanghralay</span>
           </h1>
           
           <h2 className="font-devanagari text-2xl sm:text-3xl lg:text-4xl text-muted-foreground mb-6 opacity-0 animate-fade-in-up animation-delay-200">
