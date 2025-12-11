@@ -10,10 +10,10 @@ import Auth from "./pages/Auth";
 import ResetPassword from "./pages/ResetPassword";
 import Library from "./pages/Library";
 import Scripture from "./pages/Scripture";
+import Reader from "./pages/Reader";
 import Dashboard from "./pages/Dashboard";
 import Categories from "./pages/Categories";
 import NotFound from "./pages/NotFound";
-
 const queryClient = new QueryClient();
 
 const App = () => (
@@ -30,6 +30,7 @@ const App = () => (
               <Route path="/reset-password" element={<ResetPassword />} />
               <Route path="/library" element={<Library />} />
               <Route path="/scripture/:id" element={<Scripture />} />
+              <Route path="/read/:id" element={<Reader />} />
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/categories" element={<Categories />} />
               <Route path="*" element={<NotFound />} />

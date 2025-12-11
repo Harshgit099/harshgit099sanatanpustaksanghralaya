@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import { BookOpen, Clock, User, ArrowLeft, Bookmark, BookmarkCheck, Share2, Star } from 'lucide-react';
 import Layout from '@/components/layout/Layout';
 import { Button } from '@/components/ui/button';
@@ -32,6 +32,7 @@ interface ReadingProgress {
 const Scripture = () => {
   const { id } = useParams<{ id: string }>();
   const { user } = useAuth();
+  const navigate = useNavigate();
   const [scripture, setScripture] = useState<Scripture | null>(null);
   const [loading, setLoading] = useState(true);
   const [progress, setProgress] = useState<ReadingProgress | null>(null);
@@ -137,31 +138,22 @@ const Scripture = () => {
   };
 
   const startReading = async () => {
-    if (!user || !id) {
-      toast.info('Sign in to track your reading progress');
-      return;
-    }
-
-    // Create or update reading progress
-    const { error } = await supabase.from('reading_progress').upsert(
-      {
-        user_id: user.id,
-        scripture_id: id,
-        current_chapter: progress?.current_chapter || 1,
-        current_verse: progress?.current_verse || 1,
-        progress_percentage: progress?.progress_percentage || 5,
-        last_read_at: new Date().toISOString(),
-      },
-      { onConflict: 'user_id,scripture_id' }
-    );
-
-    if (!error) {
-      setProgress((prev) => ({
-        current_chapter: prev?.current_chapter || 1,
-        current_verse: prev?.current_verse || 1,
-        progress_percentage: Math.max(prev?.progress_percentage || 0, 5),
-      }));
-      toast.success('Happy reading! 📖');
+    // Navigate to reader page
+    navigate(`/read/${id}`);
+    
+    // Track progress if logged in
+    if (user && id) {
+      await supabase.from('reading_progress').upsert(
+        {
+          user_id: user.id,
+          scripture_id: id,
+          current_chapter: progress?.current_chapter || 1,
+          current_verse: progress?.current_verse || 1,
+          progress_percentage: progress?.progress_percentage || 5,
+          last_read_at: new Date().toISOString(),
+        },
+        { onConflict: 'user_id,scripture_id' }
+      );
     }
   };
 
