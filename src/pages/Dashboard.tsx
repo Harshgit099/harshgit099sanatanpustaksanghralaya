@@ -215,7 +215,7 @@ const Dashboard = () => {
                 {readingProgress.slice(0, 3).map((item) => (
                   <Link
                     key={item.id}
-                    to={`/scripture/${item.scripture_id}`}
+                    to={`/read/${item.scripture_id}`}
                     className="glass-card rounded-xl p-4 hover:shadow-lg transition-all group"
                   >
                     <h3 className="font-display font-semibold group-hover:text-primary transition-colors mb-1">
@@ -228,7 +228,7 @@ const Dashboard = () => {
                     )}
                     <div className="flex items-center justify-between text-sm mb-2">
                       <span className="text-muted-foreground">
-                        Ch. {item.current_chapter}, V. {item.current_verse}
+                        Page {item.current_chapter}
                       </span>
                       <span className="font-medium text-primary">
                         {Math.round(Number(item.progress_percentage))}%
