@@ -33,7 +33,7 @@ const Reader = () => {
   const [pdfError, setPdfError] = useState<string | null>(null);
 
   useEffect(() => {
-    const fetchScripture = async () => {
+    const fetchScriptureAndProgress = async () => {
       if (!id) return;
 
       const { data, error } = await supabase
@@ -47,11 +47,26 @@ const Reader = () => {
       } else {
         setScripture(data);
       }
+
+      // Load saved reading progress
+      if (user) {
+        const { data: progressData } = await supabase
+          .from('reading_progress')
+          .select('current_chapter')
+          .eq('user_id', user.id)
+          .eq('scripture_id', id)
+          .maybeSingle();
+
+        if (progressData?.current_chapter) {
+          setPageNumber(progressData.current_chapter);
+        }
+      }
+
       setLoading(false);
     };
 
-    fetchScripture();
-  }, [id]);
+    fetchScriptureAndProgress();
+  }, [id, user]);
 
   useEffect(() => {
     // Save reading progress
