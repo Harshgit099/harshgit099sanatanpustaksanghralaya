@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { Heart, Github, Mail, BookOpen } from 'lucide-react';
+import { Heart, Instagram, Mail, BookOpen } from 'lucide-react';
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -86,12 +86,12 @@ const Footer = () => {
                 <Mail className="w-5 h-5" />
               </a>
               <a
-                href="https://github.com"
+                href="https://instagram.com"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="w-10 h-10 rounded-full bg-secondary flex items-center justify-center hover:bg-primary hover:text-primary-foreground transition-all"
               >
-                <Github className="w-5 h-5" />
+                <Instagram className="w-5 h-5" />
               </a>
               <a
                 href="/library"
