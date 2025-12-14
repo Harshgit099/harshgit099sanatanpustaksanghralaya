@@ -137,6 +137,7 @@ export type Database = {
           featured: boolean | null
           id: string
           language: string | null
+          parent_scripture_id: string | null
           pdf_url: string | null
           subcategory: string | null
           title: string
@@ -154,6 +155,7 @@ export type Database = {
           featured?: boolean | null
           id?: string
           language?: string | null
+          parent_scripture_id?: string | null
           pdf_url?: string | null
           subcategory?: string | null
           title: string
@@ -171,6 +173,7 @@ export type Database = {
           featured?: boolean | null
           id?: string
           language?: string | null
+          parent_scripture_id?: string | null
           pdf_url?: string | null
           subcategory?: string | null
           title?: string
@@ -178,7 +181,15 @@ export type Database = {
           total_chapters?: number | null
           total_verses?: number | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "scriptures_parent_scripture_id_fkey"
+            columns: ["parent_scripture_id"]
+            isOneToOne: false
+            referencedRelation: "scriptures"
+            referencedColumns: ["id"]
+          },
+        ]
       }
     }
     Views: {

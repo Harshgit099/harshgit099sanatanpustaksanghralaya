@@ -21,6 +21,15 @@ interface Scripture {
   total_chapters: number | null;
   total_verses: number | null;
   featured: boolean | null;
+  parent_scripture_id: string | null;
+}
+
+interface Volume {
+  id: string;
+  title: string;
+  title_hindi: string | null;
+  description: string | null;
+  pdf_url: string | null;
 }
 
 interface ReadingProgress {
@@ -37,6 +46,7 @@ const Scripture = () => {
   const [loading, setLoading] = useState(true);
   const [progress, setProgress] = useState<ReadingProgress | null>(null);
   const [isBookmarked, setIsBookmarked] = useState(false);
+  const [volumes, setVolumes] = useState<Volume[]>([]);
 
   useEffect(() => {
     const fetchScripture = async () => {
@@ -52,6 +62,17 @@ const Scripture = () => {
         console.error('Error fetching scripture:', error);
       } else {
         setScripture(data);
+        
+        // Fetch volumes (child scriptures) if this is a parent
+        const { data: volumesData } = await supabase
+          .from('scriptures')
+          .select('id, title, title_hindi, description, pdf_url')
+          .eq('parent_scripture_id', id)
+          .order('title');
+        
+        if (volumesData) {
+          setVolumes(volumesData);
+        }
       }
 
       // Fetch user progress and bookmark status
@@ -285,6 +306,37 @@ const Scripture = () => {
                   </div>
                 </div>
               </div>
+
+              {/* Volumes Section */}
+              {volumes.length > 0 && (
+                <div className="glass-card rounded-2xl p-6 mb-6">
+                  <h2 className="font-display text-xl font-semibold mb-4">Volumes</h2>
+                  <div className="space-y-3">
+                    {volumes.map((volume, index) => (
+                      <Link
+                        key={volume.id}
+                        to={`/scripture/${volume.id}`}
+                        className="flex items-center gap-4 p-4 rounded-xl bg-secondary/50 hover:bg-secondary transition-colors group"
+                      >
+                        <div className={`w-12 h-16 rounded-lg bg-gradient-to-br ${getCategoryColor(scripture.category)} flex items-center justify-center shadow-md`}>
+                          <span className="text-white font-bold text-lg">{index + 1}</span>
+                        </div>
+                        <div className="flex-1">
+                          <h3 className="font-semibold group-hover:text-primary transition-colors">
+                            {volume.title}
+                          </h3>
+                          {volume.title_hindi && (
+                            <p className="font-devanagari text-sm text-muted-foreground">
+                              {volume.title_hindi}
+                            </p>
+                          )}
+                        </div>
+                        <BookOpen className="w-5 h-5 text-muted-foreground group-hover:text-primary transition-colors" />
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              )}
 
               {/* Description */}
               <div className="glass-card rounded-2xl p-6">
