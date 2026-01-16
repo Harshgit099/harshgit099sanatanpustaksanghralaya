@@ -144,6 +144,7 @@ export type Database = {
           title_hindi: string | null
           total_chapters: number | null
           total_verses: number | null
+          translation_group_id: string | null
         }
         Insert: {
           author?: string | null
@@ -162,6 +163,7 @@ export type Database = {
           title_hindi?: string | null
           total_chapters?: number | null
           total_verses?: number | null
+          translation_group_id?: string | null
         }
         Update: {
           author?: string | null
@@ -180,6 +182,7 @@ export type Database = {
           title_hindi?: string | null
           total_chapters?: number | null
           total_verses?: number | null
+          translation_group_id?: string | null
         }
         Relationships: [
           {

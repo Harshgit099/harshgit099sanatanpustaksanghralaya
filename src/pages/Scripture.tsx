@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { BookOpen, Clock, User, ArrowLeft, Bookmark, BookmarkCheck, Share2, Star } from 'lucide-react';
+import LanguageSelector from '@/components/scripture/LanguageSelector';
 import Layout from '@/components/layout/Layout';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
@@ -32,6 +33,12 @@ interface Volume {
   pdf_url: string | null;
 }
 
+interface Translation {
+  id: string;
+  language: string | null;
+  title: string;
+}
+
 interface ReadingProgress {
   current_chapter: number;
   current_verse: number;
@@ -47,6 +54,7 @@ const Scripture = () => {
   const [progress, setProgress] = useState<ReadingProgress | null>(null);
   const [isBookmarked, setIsBookmarked] = useState(false);
   const [volumes, setVolumes] = useState<Volume[]>([]);
+  const [translations, setTranslations] = useState<Translation[]>([]);
 
   useEffect(() => {
     const fetchScripture = async () => {
@@ -72,6 +80,22 @@ const Scripture = () => {
         
         if (volumesData) {
           setVolumes(volumesData);
+        }
+
+        // Fetch available translations (scriptures with same translation_group_id)
+        if (data?.translation_group_id) {
+          const { data: translationsData } = await supabase
+            .from('scriptures')
+            .select('id, language, title')
+            .eq('translation_group_id', data.translation_group_id)
+            .order('language');
+          
+          if (translationsData) {
+            setTranslations(translationsData);
+          }
+        } else {
+          // If no translation group, just show the current scripture
+          setTranslations([{ id: data.id, language: data.language, title: data.title }]);
         }
       }
 
@@ -108,6 +132,10 @@ const Scripture = () => {
 
     fetchScripture();
   }, [id, user]);
+
+  const handleLanguageChange = (scriptureId: string) => {
+    navigate(`/scripture/${scriptureId}`);
+  };
 
   const handleBookmark = async () => {
     if (!user) {
@@ -271,7 +299,7 @@ const Scripture = () => {
                       </div>
                     )}
 
-                    <div className="flex flex-wrap gap-4 text-sm text-muted-foreground mb-6">
+                    <div className="flex flex-wrap gap-4 text-sm text-muted-foreground mb-4">
                       {scripture.total_chapters && (
                         <div className="flex items-center gap-1">
                           <BookOpen className="w-4 h-4" />
@@ -285,6 +313,17 @@ const Scripture = () => {
                         </div>
                       )}
                     </div>
+
+                    {/* Language Selector */}
+                    {translations.length > 1 && (
+                      <div className="mb-6">
+                        <LanguageSelector
+                          currentLanguage={scripture.language}
+                          translations={translations}
+                          onLanguageChange={handleLanguageChange}
+                        />
+                      </div>
+                    )}
 
                     <div className="flex flex-wrap gap-3">
                       <Button onClick={startReading} className="glow-primary">
