@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { BookOpen, Bookmark, TrendingUp, Clock, User } from 'lucide-react';
+import { BookOpen, Bookmark, TrendingUp, Clock, User, X } from 'lucide-react';
 import Layout from '@/components/layout/Layout';
 import ScriptureCard from '@/components/scripture/ScriptureCard';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
-
+import { toast } from 'sonner';
 interface ReadingProgressWithScripture {
   id: string;
   scripture_id: string;
@@ -114,6 +114,21 @@ const Dashboard = () => {
       fetchUserData();
     }
   }, [user, authLoading, navigate]);
+
+  const handleRemoveBookmark = async (bookmarkId: string, scriptureTitle: string) => {
+    const { error } = await supabase
+      .from('bookmarks')
+      .delete()
+      .eq('id', bookmarkId);
+
+    if (error) {
+      toast.error('Failed to remove bookmark');
+      return;
+    }
+
+    setBookmarks(prev => prev.filter(b => b.id !== bookmarkId));
+    toast.success(`Removed "${scriptureTitle}" from bookmarks`);
+  };
 
   if (authLoading || loading) {
     return (
@@ -264,16 +279,28 @@ const Dashboard = () => {
             ) : (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                 {bookmarks.map((bookmark) => (
-                  <ScriptureCard
-                    key={bookmark.id}
-                    id={bookmark.scriptures.id}
-                    title={bookmark.scriptures.title}
-                    titleHindi={bookmark.scriptures.title_hindi}
-                    description={bookmark.scriptures.description}
-                    category={bookmark.scriptures.category}
-                    totalChapters={bookmark.scriptures.total_chapters}
-                    totalVerses={bookmark.scriptures.total_verses}
-                  />
+                  <div key={bookmark.id} className="relative group">
+                    <Button
+                      variant="destructive"
+                      size="icon"
+                      className="absolute -top-2 -right-2 z-10 h-7 w-7 opacity-0 group-hover:opacity-100 transition-opacity shadow-md"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        handleRemoveBookmark(bookmark.id, bookmark.scriptures.title);
+                      }}
+                    >
+                      <X className="h-4 w-4" />
+                    </Button>
+                    <ScriptureCard
+                      id={bookmark.scriptures.id}
+                      title={bookmark.scriptures.title}
+                      titleHindi={bookmark.scriptures.title_hindi}
+                      description={bookmark.scriptures.description}
+                      category={bookmark.scriptures.category}
+                      totalChapters={bookmark.scriptures.total_chapters}
+                      totalVerses={bookmark.scriptures.total_verses}
+                    />
+                  </div>
                 ))}
               </div>
             )}
