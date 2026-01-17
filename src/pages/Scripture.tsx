@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { BookOpen, Clock, User, ArrowLeft, Bookmark, BookmarkCheck, Share2, Star } from 'lucide-react';
 import LanguageSelector from '@/components/scripture/LanguageSelector';
+import AnimatedBookCover from '@/components/scripture/AnimatedBookCover';
 import Layout from '@/components/layout/Layout';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
@@ -262,11 +263,12 @@ const Scripture = () => {
               {/* Header */}
               <div className="glass-card rounded-2xl p-6 mb-6">
                 <div className="flex flex-col md:flex-row gap-6">
-                  {/* Book Cover */}
+                  {/* Animated Book Cover */}
                   <div className="flex-shrink-0">
-                    <div className={`w-40 h-56 rounded-xl bg-gradient-to-br ${getCategoryColor(scripture.category)} flex items-center justify-center shadow-xl`}>
-                      <BookOpen className="w-16 h-16 text-white" />
-                    </div>
+                    <AnimatedBookCover 
+                      category={scripture.category} 
+                      title={scripture.title_hindi || scripture.title}
+                    />
                   </div>
 
                   {/* Info */}
