@@ -51,7 +51,8 @@ const Library = () => {
       setLoading(true);
 
       // Fetch scriptures
-      let query = supabase.from('scriptures').select('*');
+      // Only show parent scriptures (exclude volumes/sub-sections)
+      let query = supabase.from('scriptures').select('*').is('parent_scripture_id', null);
 
       if (selectedCategory !== 'All') {
         query = query.ilike('category', selectedCategory);
