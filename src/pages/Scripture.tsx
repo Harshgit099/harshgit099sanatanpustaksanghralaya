@@ -328,10 +328,12 @@ const Scripture = () => {
                     )}
 
                     <div className="flex flex-wrap gap-3">
-                      <Button onClick={startReading} className="glow-primary">
-                        <BookOpen className="w-4 h-4 mr-2" />
-                        {progress ? 'Continue Reading' : 'Start Reading'}
-                      </Button>
+                      {volumes.length === 0 && (
+                        <Button onClick={startReading} className="glow-primary">
+                          <BookOpen className="w-4 h-4 mr-2" />
+                          {progress ? 'Continue Reading' : 'Start Reading'}
+                        </Button>
+                      )}
                       <Button variant="outline" onClick={handleBookmark}>
                         {isBookmarked ? (
                           <BookmarkCheck className="w-4 h-4 mr-2 text-primary" />
