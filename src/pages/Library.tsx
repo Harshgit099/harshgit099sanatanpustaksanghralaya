@@ -19,6 +19,7 @@ interface Scripture {
   total_chapters: number | null;
   total_verses: number | null;
   featured: boolean | null;
+  cover_image: string | null;
 }
 
 interface ReadingProgress {
@@ -225,6 +226,7 @@ const Library = () => {
                       totalVerses={scripture.total_verses}
                       featured={scripture.featured || false}
                       progress={progress[scripture.id]}
+                      coverImage={scripture.cover_image}
                     />
                   </div>
                 ))}

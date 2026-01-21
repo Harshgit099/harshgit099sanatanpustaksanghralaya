@@ -11,6 +11,7 @@ interface ScriptureCardProps {
   totalVerses?: number | null;
   featured?: boolean;
   progress?: number;
+  coverImage?: string | null;
 }
 
 const ScriptureCard = ({
@@ -23,6 +24,7 @@ const ScriptureCard = ({
   totalVerses,
   featured,
   progress,
+  coverImage,
 }: ScriptureCardProps) => {
   const getCategoryColor = (cat: string) => {
     const colors: Record<string, string> = {
@@ -39,19 +41,27 @@ const ScriptureCard = ({
   return (
     <Link to={`/scripture/${id}`} className="group block h-full">
       <article className="relative h-full glass-card rounded-2xl overflow-hidden transition-all duration-300 hover:shadow-xl hover:scale-[1.02]">
-        {/* Header with gradient */}
-        <div className={`relative h-32 bg-gradient-to-br ${getCategoryColor(category)} p-4`}>
+        {/* Header with gradient or cover image */}
+        <div className={`relative h-32 ${coverImage ? '' : `bg-gradient-to-br ${getCategoryColor(category)}`} overflow-hidden`}>
+          {coverImage && (
+            <img 
+              src={coverImage} 
+              alt={title}
+              className="absolute inset-0 w-full h-full object-cover"
+            />
+          )}
+          {coverImage && <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />}
           {featured && (
-            <div className="absolute top-3 right-3">
-              <Star className="w-5 h-5 text-white fill-white" />
+            <div className="absolute top-3 right-3 z-10">
+              <Star className="w-5 h-5 text-white fill-white drop-shadow-lg" />
             </div>
           )}
-          <div className="absolute bottom-4 left-4">
+          <div className="absolute bottom-4 left-4 z-10">
             <span className="px-2 py-1 bg-white/20 backdrop-blur-sm rounded-full text-xs text-white font-medium">
               {category}
             </span>
           </div>
-          <div className="absolute -bottom-8 right-4">
+          <div className="absolute -bottom-8 right-4 z-10">
             <div className="w-16 h-20 bg-card rounded-lg shadow-lg flex items-center justify-center group-hover:scale-105 transition-transform">
               <BookOpen className="w-8 h-8 text-primary" />
             </div>
