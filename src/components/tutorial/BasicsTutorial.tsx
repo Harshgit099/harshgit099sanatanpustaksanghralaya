@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { X, Sun, Moon, ArrowRight, Check, Bookmark, Heart, ArrowUp } from 'lucide-react';
+import { X, Sun, Moon, ArrowRight, Check, Bookmark, Heart, ArrowUp, Lock, Unlock } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useTheme } from '@/contexts/ThemeContext';
 
@@ -149,6 +149,59 @@ const BasicsTutorial = ({ isOpen, onClose }: BasicsTutorialProps) => {
       ),
     },
     {
+      title: 'Lock Your Screen',
+      description: 'Prevent accidental touches while reading.',
+      content: (
+        <div className="flex flex-col items-center gap-6">
+          <div className="flex items-center gap-8">
+            <div className="flex flex-col items-center gap-2 p-4 rounded-xl bg-muted/50">
+              <div className="w-14 h-14 rounded-xl bg-background border flex items-center justify-center">
+                <Unlock className="h-7 w-7 text-muted-foreground" />
+              </div>
+              <span className="text-sm font-medium">Unlocked</span>
+              <p className="text-xs text-muted-foreground text-center">
+                All controls active
+              </p>
+            </div>
+            <div className="flex flex-col items-center gap-2 p-4 rounded-xl bg-primary/10 ring-2 ring-primary">
+              <div className="w-14 h-14 rounded-xl bg-primary flex items-center justify-center">
+                <Lock className="h-7 w-7 text-primary-foreground" />
+              </div>
+              <span className="text-sm font-medium">Locked</span>
+              <p className="text-xs text-muted-foreground text-center">
+                Controls disabled
+              </p>
+            </div>
+          </div>
+          
+          <div className="space-y-3 text-center">
+            <p className="text-muted-foreground">
+              Tap the lock icon in the PDF reader header to prevent accidental page changes or zoom.
+            </p>
+            
+            <div className="bg-muted/50 rounded-xl p-4 space-y-2">
+              <p className="text-sm font-medium">When locked, these are disabled:</p>
+              <div className="flex flex-wrap justify-center gap-2">
+                <span className="px-3 py-1 bg-background rounded-full text-xs border">
+                  ⬅️ Page Navigation
+                </span>
+                <span className="px-3 py-1 bg-background rounded-full text-xs border">
+                  🔍 Zoom Controls
+                </span>
+                <span className="px-3 py-1 bg-background rounded-full text-xs border">
+                  📺 Fullscreen
+                </span>
+              </div>
+            </div>
+
+            <p className="text-xs text-muted-foreground">
+              Tap the lock icon again to unlock and regain control.
+            </p>
+          </div>
+        </div>
+      ),
+    },
+    {
       title: 'You\'re All Set!',
       description: 'You know the basics. Enjoy your spiritual journey.',
       content: (
@@ -170,10 +223,16 @@ const BasicsTutorial = ({ isOpen, onClose }: BasicsTutorialProps) => {
               </div>
               <span className="text-xs">Favourites</span>
             </div>
+            <div className="flex flex-col items-center gap-1">
+              <div className="p-2 bg-muted rounded-lg">
+                <Lock className="h-5 w-5" />
+              </div>
+              <span className="text-xs">Lock</span>
+            </div>
           </div>
 
           <p className="text-sm text-muted-foreground text-center mt-2">
-            Find these icons in the header to use these features anytime!
+            Use these features anytime for the best reading experience!
           </p>
         </div>
       ),
