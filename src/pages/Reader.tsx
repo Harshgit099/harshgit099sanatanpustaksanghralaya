@@ -159,7 +159,7 @@ const Reader = () => {
 
   return (
     <Layout>
-      <div className="min-h-screen flex flex-col">
+      <div className="min-h-screen flex flex-col overflow-x-hidden">
         {/* Header */}
         <div className="sticky top-0 z-50 glass-card border-b border-border/50 px-4 py-3">
           <div className="container mx-auto flex items-center justify-between">
@@ -235,7 +235,7 @@ const Reader = () => {
         </div>
 
         {/* PDF Viewer */}
-        <div className="flex-1 overflow-auto bg-muted/30 py-6">
+        <div className="flex-1 overflow-x-hidden overflow-y-auto bg-muted/30 py-6">
           <div className="container mx-auto flex justify-center">
             {pdfError ? (
               <div className="text-center py-16">
