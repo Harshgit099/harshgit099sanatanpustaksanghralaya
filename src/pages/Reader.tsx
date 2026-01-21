@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { Document, Page, pdfjs } from 'react-pdf';
-import { ArrowLeft, ChevronLeft, ChevronRight, ZoomIn, ZoomOut, Maximize2, Minimize2 } from 'lucide-react';
+import { ArrowLeft, ChevronLeft, ChevronRight, ZoomIn, ZoomOut, Maximize2, Minimize2, Lock, Unlock } from 'lucide-react';
 import Layout from '@/components/layout/Layout';
 import { Button } from '@/components/ui/button';
 import { supabase } from '@/integrations/supabase/client';
@@ -31,6 +31,7 @@ const Reader = () => {
   const [scale, setScale] = useState<number>(1.0);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [pdfError, setPdfError] = useState<string | null>(null);
+  const [isLocked, setIsLocked] = useState(false);
 
   useEffect(() => {
     const fetchScriptureAndProgress = async () => {
@@ -181,20 +182,52 @@ const Reader = () => {
             </div>
 
             <div className="flex items-center gap-2">
-              <Button variant="ghost" size="icon" onClick={zoomOut} disabled={scale <= 0.5}>
+              <Button 
+                variant="ghost" 
+                size="icon" 
+                onClick={zoomOut} 
+                disabled={scale <= 0.5 || isLocked}
+                className={isLocked ? 'opacity-50 cursor-not-allowed' : ''}
+              >
                 <ZoomOut className="w-4 h-4" />
               </Button>
               <span className="text-sm text-muted-foreground min-w-[4rem] text-center">
                 {Math.round(scale * 100)}%
               </span>
-              <Button variant="ghost" size="icon" onClick={zoomIn} disabled={scale >= 2.5}>
+              <Button 
+                variant="ghost" 
+                size="icon" 
+                onClick={zoomIn} 
+                disabled={scale >= 2.5 || isLocked}
+                className={isLocked ? 'opacity-50 cursor-not-allowed' : ''}
+              >
                 <ZoomIn className="w-4 h-4" />
               </Button>
-              <Button variant="ghost" size="icon" onClick={toggleFullscreen}>
+              <Button 
+                variant="ghost" 
+                size="icon" 
+                onClick={toggleFullscreen}
+                disabled={isLocked}
+                className={isLocked ? 'opacity-50 cursor-not-allowed' : ''}
+              >
                 {isFullscreen ? (
                   <Minimize2 className="w-4 h-4" />
                 ) : (
                   <Maximize2 className="w-4 h-4" />
+                )}
+              </Button>
+              <div className="w-px h-6 bg-border mx-1" />
+              <Button 
+                variant={isLocked ? 'default' : 'ghost'} 
+                size="icon" 
+                onClick={() => setIsLocked(!isLocked)}
+                className={isLocked ? 'bg-primary text-primary-foreground' : ''}
+                title={isLocked ? 'Unlock controls' : 'Lock controls'}
+              >
+                {isLocked ? (
+                  <Lock className="w-4 h-4" />
+                ) : (
+                  <Unlock className="w-4 h-4" />
                 )}
               </Button>
             </div>
@@ -241,7 +274,8 @@ const Reader = () => {
               <Button
                 variant="outline"
                 onClick={goToPrevPage}
-                disabled={pageNumber <= 1}
+                disabled={pageNumber <= 1 || isLocked}
+                className={isLocked ? 'opacity-50 cursor-not-allowed' : ''}
               >
                 <ChevronLeft className="w-4 h-4 mr-2" />
                 Previous
@@ -254,12 +288,14 @@ const Reader = () => {
                   max={numPages}
                   value={pageNumber}
                   onChange={(e) => {
+                    if (isLocked) return;
                     const val = parseInt(e.target.value);
                     if (val >= 1 && val <= numPages) {
                       setPageNumber(val);
                     }
                   }}
-                  className="w-16 text-center bg-background border border-border rounded-md px-2 py-1 text-sm"
+                  disabled={isLocked}
+                  className={`w-16 text-center bg-background border border-border rounded-md px-2 py-1 text-sm ${isLocked ? 'opacity-50 cursor-not-allowed' : ''}`}
                 />
                 <span className="text-sm text-muted-foreground">of {numPages}</span>
               </div>
@@ -267,7 +303,8 @@ const Reader = () => {
               <Button
                 variant="outline"
                 onClick={goToNextPage}
-                disabled={pageNumber >= numPages}
+                disabled={pageNumber >= numPages || isLocked}
+                className={isLocked ? 'opacity-50 cursor-not-allowed' : ''}
               >
                 Next
                 <ChevronRight className="w-4 h-4 ml-2" />
