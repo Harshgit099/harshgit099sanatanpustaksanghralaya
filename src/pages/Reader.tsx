@@ -277,8 +277,8 @@ const Reader = () => {
                   />
                 </Document>
                 {/* Watermark */}
-                <div className="absolute bottom-6 right-6 pointer-events-none select-none z-10">
-                  <span className="text-sm sm:text-base text-foreground/40 font-display tracking-wide drop-shadow-sm">
+                <div className="absolute bottom-4 right-4 pointer-events-none select-none">
+                  <span className="text-xs sm:text-sm text-foreground/20 font-display tracking-wide">
                     Sanatan Pustak Sanghralay
                   </span>
                 </div>
