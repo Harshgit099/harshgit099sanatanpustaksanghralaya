@@ -30,6 +30,7 @@ const Reader = () => {
   const [loading, setLoading] = useState(true);
   const [numPages, setNumPages] = useState<number>(0);
   const [pageNumber, setPageNumber] = useState<number>(1);
+  const [pageInputValue, setPageInputValue] = useState<string>('1');
   const [scale, setScale] = useState<number | undefined>(undefined);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [pdfError, setPdfError] = useState<string | null>(null);
@@ -62,6 +63,7 @@ const Reader = () => {
 
         if (progressData?.current_chapter) {
           setPageNumber(progressData.current_chapter);
+          setPageInputValue(String(progressData.current_chapter));
         }
       }
 
@@ -112,8 +114,16 @@ const Reader = () => {
     setPdfError('Unable to load PDF. The file may not be available yet.');
   };
 
-  const goToPrevPage = () => setPageNumber((prev) => Math.max(prev - 1, 1));
-  const goToNextPage = () => setPageNumber((prev) => Math.min(prev + 1, numPages));
+  const goToPrevPage = () => {
+    const newPage = Math.max(pageNumber - 1, 1);
+    setPageNumber(newPage);
+    setPageInputValue(String(newPage));
+  };
+  const goToNextPage = () => {
+    const newPage = Math.min(pageNumber + 1, numPages);
+    setPageNumber(newPage);
+    setPageInputValue(String(newPage));
+  };
   const zoomIn = () => setScale((prev) => Math.min((prev ?? 1.0) + 0.25, 2.5));
   const zoomOut = () => setScale((prev) => Math.max((prev ?? 1.0) - 0.25, 0.5));
 
@@ -293,15 +303,39 @@ const Reader = () => {
 
               <div className="flex items-center gap-2">
                 <input
-                  type="number"
-                  min={1}
-                  max={numPages}
-                  value={pageNumber}
+                  type="text"
+                  inputMode="numeric"
+                  pattern="[0-9]*"
+                  value={pageInputValue}
                   onChange={(e) => {
                     if (isLocked) return;
-                    const val = parseInt(e.target.value);
-                    if (val >= 1 && val <= numPages) {
+                    const inputVal = e.target.value;
+                    // Allow empty string or valid numbers only
+                    if (inputVal === '' || /^\d+$/.test(inputVal)) {
+                      setPageInputValue(inputVal);
+                    }
+                  }}
+                  onBlur={() => {
+                    // On blur, validate and set the page number
+                    const val = parseInt(pageInputValue);
+                    if (!isNaN(val) && val >= 1 && val <= numPages) {
                       setPageNumber(val);
+                      setPageInputValue(String(val));
+                    } else {
+                      // Reset to current page if invalid
+                      setPageInputValue(String(pageNumber));
+                    }
+                  }}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') {
+                      const val = parseInt(pageInputValue);
+                      if (!isNaN(val) && val >= 1 && val <= numPages) {
+                        setPageNumber(val);
+                        setPageInputValue(String(val));
+                      } else {
+                        setPageInputValue(String(pageNumber));
+                      }
+                      (e.target as HTMLInputElement).blur();
                     }
                   }}
                   disabled={isLocked}
