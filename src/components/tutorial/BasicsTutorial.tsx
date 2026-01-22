@@ -243,10 +243,10 @@ const BasicsTutorial = ({ isOpen, onClose }: BasicsTutorialProps) => {
   const isLastStep = step === steps.length - 1;
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-start justify-center pt-20 bg-black/60 backdrop-blur-sm animate-fade-in">
-      <div className="relative bg-background border border-border rounded-2xl shadow-2xl max-w-md w-full mx-4 overflow-hidden">
+    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-fade-in">
+      <div className="relative bg-background border border-border rounded-2xl shadow-2xl max-w-md w-full max-h-[90vh] overflow-hidden flex flex-col">
         {/* Progress bar */}
-        <div className="absolute top-0 left-0 right-0 h-1 bg-muted">
+        <div className="absolute top-0 left-0 right-0 h-1 bg-muted z-10">
           <div 
             className="h-full bg-primary transition-all duration-300"
             style={{ width: `${((step + 1) / steps.length) * 100}%` }}
@@ -256,15 +256,15 @@ const BasicsTutorial = ({ isOpen, onClose }: BasicsTutorialProps) => {
         {/* Close button */}
         <button
           onClick={handleComplete}
-          className="absolute top-4 right-4 p-1 rounded-full hover:bg-muted transition-colors"
+          className="absolute top-4 right-4 p-1 rounded-full hover:bg-muted transition-colors z-10"
         >
           <X className="h-5 w-5 text-muted-foreground" />
         </button>
 
-        {/* Content */}
-        <div className="p-8 pt-10">
-          <div className="text-center mb-6">
-            <h2 className="text-xl font-display font-bold text-foreground mb-2">
+        {/* Scrollable Content */}
+        <div className="p-6 pt-8 overflow-y-auto flex-1">
+          <div className="text-center mb-4">
+            <h2 className="text-lg font-display font-bold text-foreground mb-1">
               {currentStep.title}
             </h2>
             <p className="text-sm text-muted-foreground">
@@ -272,12 +272,12 @@ const BasicsTutorial = ({ isOpen, onClose }: BasicsTutorialProps) => {
             </p>
           </div>
 
-          <div className="min-h-[240px] flex items-center justify-center">
+          <div className="flex items-center justify-center py-4">
             {currentStep.content}
           </div>
 
           {/* Navigation */}
-          <div className="flex items-center justify-between mt-6">
+          <div className="flex items-center justify-between mt-4 pt-4 border-t border-border">
             <div className="flex gap-1.5">
               {steps.map((_, idx) => (
                 <button
