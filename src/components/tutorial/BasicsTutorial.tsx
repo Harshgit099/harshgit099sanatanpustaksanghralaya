@@ -262,7 +262,7 @@ const BasicsTutorial = ({ isOpen, onClose }: BasicsTutorialProps) => {
         </button>
 
         {/* Scrollable Content */}
-        <div className="p-6 pt-8 pb-8 overflow-y-auto flex-1">
+        <div className="p-6 pt-8 overflow-y-auto flex-1">
           <div className="text-center mb-4">
             <h2 className="text-lg font-display font-bold text-foreground mb-1">
               {currentStep.title}
