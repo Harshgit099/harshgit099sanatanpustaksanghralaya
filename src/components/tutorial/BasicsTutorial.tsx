@@ -277,20 +277,8 @@ const BasicsTutorial = ({ isOpen, onClose }: BasicsTutorialProps) => {
           </div>
 
           {/* Navigation */}
-          <div className="flex items-center justify-between mt-4 pt-4 border-t border-border">
-            <div className="flex gap-1.5">
-              {steps.map((_, idx) => (
-                <button
-                  key={idx}
-                  onClick={() => setStep(idx)}
-                  className={`w-2 h-2 rounded-full transition-all ${
-                    idx === step ? 'bg-primary w-6' : 'bg-muted hover:bg-muted-foreground/30'
-                  }`}
-                />
-              ))}
-            </div>
-
-            <div className="flex gap-2">
+          <div className="flex flex-col items-center gap-4 mt-4 pt-4 border-t border-border">
+            <div className="flex gap-2 justify-center">
               {step > 0 && (
                 <Button
                   variant="ghost"
@@ -311,6 +299,18 @@ const BasicsTutorial = ({ isOpen, onClose }: BasicsTutorialProps) => {
                   <ArrowRight className="h-4 w-4" />
                 </Button>
               )}
+            </div>
+
+            <div className="flex gap-1.5">
+              {steps.map((_, idx) => (
+                <button
+                  key={idx}
+                  onClick={() => setStep(idx)}
+                  className={`w-2 h-2 rounded-full transition-all ${
+                    idx === step ? 'bg-primary w-6' : 'bg-muted hover:bg-muted-foreground/30'
+                  }`}
+                />
+              ))}
             </div>
           </div>
         </div>
