@@ -6,6 +6,7 @@ import Layout from '@/components/layout/Layout';
 import { Button } from '@/components/ui/button';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
+import { useIsMobile } from '@/hooks/use-mobile';
 import 'react-pdf/dist/Page/AnnotationLayer.css';
 import 'react-pdf/dist/Page/TextLayer.css';
 
@@ -24,11 +25,12 @@ const Reader = () => {
   const { id } = useParams<{ id: string }>();
   const { user } = useAuth();
   const navigate = useNavigate();
+  const isMobile = useIsMobile();
   const [scripture, setScripture] = useState<Scripture | null>(null);
   const [loading, setLoading] = useState(true);
   const [numPages, setNumPages] = useState<number>(0);
   const [pageNumber, setPageNumber] = useState<number>(1);
-  const [scale, setScale] = useState<number>(1.0);
+  const [scale, setScale] = useState<number | undefined>(undefined);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [pdfError, setPdfError] = useState<string | null>(null);
   const [isLocked, setIsLocked] = useState(false);
@@ -69,6 +71,13 @@ const Reader = () => {
     fetchScriptureAndProgress();
   }, [id, user]);
 
+  // Set default zoom based on device type
+  useEffect(() => {
+    if (scale === undefined && isMobile !== undefined) {
+      setScale(isMobile ? 0.75 : 1.0);
+    }
+  }, [isMobile, scale]);
+
   useEffect(() => {
     // Save reading progress
     const saveProgress = async () => {
@@ -105,8 +114,8 @@ const Reader = () => {
 
   const goToPrevPage = () => setPageNumber((prev) => Math.max(prev - 1, 1));
   const goToNextPage = () => setPageNumber((prev) => Math.min(prev + 1, numPages));
-  const zoomIn = () => setScale((prev) => Math.min(prev + 0.25, 2.5));
-  const zoomOut = () => setScale((prev) => Math.max(prev - 0.25, 0.5));
+  const zoomIn = () => setScale((prev) => Math.min((prev ?? 1.0) + 0.25, 2.5));
+  const zoomOut = () => setScale((prev) => Math.max((prev ?? 1.0) - 0.25, 0.5));
 
   const toggleFullscreen = () => {
     if (!document.fullscreenElement) {
@@ -192,7 +201,7 @@ const Reader = () => {
                 <ZoomOut className="w-4 h-4" />
               </Button>
               <span className="text-sm text-muted-foreground min-w-[4rem] text-center">
-                {Math.round(scale * 100)}%
+                {Math.round((scale ?? 1.0) * 100)}%
               </span>
               <Button 
                 variant="ghost" 
@@ -257,7 +266,7 @@ const Reader = () => {
               >
                 <Page
                   pageNumber={pageNumber}
-                  scale={scale}
+                  scale={scale ?? 1.0}
                   className="shadow-2xl rounded-lg overflow-hidden"
                   renderTextLayer={true}
                   renderAnnotationLayer={true}
