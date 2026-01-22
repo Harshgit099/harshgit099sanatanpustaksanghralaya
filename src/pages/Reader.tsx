@@ -170,73 +170,74 @@ const Reader = () => {
     <Layout>
       <div className="min-h-screen flex flex-col overflow-x-hidden">
         {/* Header */}
-        <div className="sticky top-0 z-50 glass-card border-b border-border/50 px-4 py-3">
-          <div className="container mx-auto flex items-center justify-between">
-            <div className="flex items-center gap-4">
+        <div className="sticky top-0 z-50 glass-card border-b border-border/50 px-2 sm:px-4 py-2 sm:py-3">
+          <div className="container mx-auto flex items-center justify-between gap-2">
+            <div className="flex items-center gap-2 sm:gap-4 min-w-0 flex-shrink">
               <Button
                 variant="ghost"
                 size="icon"
+                className="flex-shrink-0 h-8 w-8 sm:h-10 sm:w-10"
                 onClick={() => navigate(`/scripture/${id}`)}
               >
-                <ArrowLeft className="w-5 h-5" />
+                <ArrowLeft className="w-4 h-4 sm:w-5 sm:h-5" />
               </Button>
-              <div>
-                <h1 className="font-display text-lg font-semibold">{scripture.title}</h1>
+              <div className="min-w-0">
+                <h1 className="font-display text-sm sm:text-lg font-semibold truncate">{scripture.title}</h1>
                 {scripture.title_hindi && (
-                  <p className="text-sm text-muted-foreground font-devanagari">
+                  <p className="text-xs sm:text-sm text-muted-foreground font-devanagari truncate">
                     {scripture.title_hindi}
                   </p>
                 )}
               </div>
             </div>
 
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-0.5 sm:gap-2 flex-shrink-0">
               <Button 
                 variant="ghost" 
                 size="icon" 
                 onClick={zoomOut} 
-                disabled={scale <= 0.5 || isLocked}
-                className={isLocked ? 'opacity-50 cursor-not-allowed' : ''}
+                disabled={(scale ?? 1.0) <= 0.5 || isLocked}
+                className={`h-8 w-8 sm:h-10 sm:w-10 ${isLocked ? 'opacity-50 cursor-not-allowed' : ''}`}
               >
-                <ZoomOut className="w-4 h-4" />
+                <ZoomOut className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
               </Button>
-              <span className="text-sm text-muted-foreground min-w-[4rem] text-center">
+              <span className="text-xs sm:text-sm text-muted-foreground min-w-[2.5rem] sm:min-w-[4rem] text-center">
                 {Math.round((scale ?? 1.0) * 100)}%
               </span>
               <Button 
                 variant="ghost" 
                 size="icon" 
                 onClick={zoomIn} 
-                disabled={scale >= 2.5 || isLocked}
-                className={isLocked ? 'opacity-50 cursor-not-allowed' : ''}
+                disabled={(scale ?? 1.0) >= 2.5 || isLocked}
+                className={`h-8 w-8 sm:h-10 sm:w-10 ${isLocked ? 'opacity-50 cursor-not-allowed' : ''}`}
               >
-                <ZoomIn className="w-4 h-4" />
+                <ZoomIn className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
               </Button>
               <Button 
                 variant="ghost" 
                 size="icon" 
                 onClick={toggleFullscreen}
                 disabled={isLocked}
-                className={isLocked ? 'opacity-50 cursor-not-allowed' : ''}
+                className={`hidden sm:flex h-8 w-8 sm:h-10 sm:w-10 ${isLocked ? 'opacity-50 cursor-not-allowed' : ''}`}
               >
                 {isFullscreen ? (
-                  <Minimize2 className="w-4 h-4" />
+                  <Minimize2 className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                 ) : (
-                  <Maximize2 className="w-4 h-4" />
+                  <Maximize2 className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                 )}
               </Button>
-              <div className="w-px h-6 bg-border mx-1" />
+              <div className="w-px h-4 sm:h-6 bg-border mx-0.5 sm:mx-1" />
               <Button 
                 variant={isLocked ? 'default' : 'ghost'} 
                 size="icon" 
                 onClick={() => setIsLocked(!isLocked)}
-                className={isLocked ? 'bg-primary text-primary-foreground' : ''}
+                className={`h-8 w-8 sm:h-10 sm:w-10 ${isLocked ? 'bg-primary text-primary-foreground' : ''}`}
                 title={isLocked ? 'Unlock controls' : 'Lock controls'}
               >
                 {isLocked ? (
-                  <Lock className="w-4 h-4" />
+                  <Lock className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                 ) : (
-                  <Unlock className="w-4 h-4" />
+                  <Unlock className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                 )}
               </Button>
             </div>
