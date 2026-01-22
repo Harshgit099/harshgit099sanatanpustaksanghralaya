@@ -257,24 +257,32 @@ const Reader = () => {
                 </Button>
               </div>
             ) : (
-              <Document
-                file={scripture.pdf_url}
-                onLoadSuccess={onDocumentLoadSuccess}
-                onLoadError={onDocumentLoadError}
-                loading={
-                  <div className="flex items-center justify-center py-16">
-                    <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin" />
-                  </div>
-                }
-              >
-                <Page
-                  pageNumber={pageNumber}
-                  scale={scale ?? 1.0}
-                  className="shadow-2xl rounded-lg overflow-hidden"
-                  renderTextLayer={true}
-                  renderAnnotationLayer={true}
-                />
-              </Document>
+              <div className="relative">
+                <Document
+                  file={scripture.pdf_url}
+                  onLoadSuccess={onDocumentLoadSuccess}
+                  onLoadError={onDocumentLoadError}
+                  loading={
+                    <div className="flex items-center justify-center py-16">
+                      <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin" />
+                    </div>
+                  }
+                >
+                  <Page
+                    pageNumber={pageNumber}
+                    scale={scale ?? 1.0}
+                    className="shadow-2xl rounded-lg overflow-hidden"
+                    renderTextLayer={true}
+                    renderAnnotationLayer={true}
+                  />
+                </Document>
+                {/* Watermark */}
+                <div className="absolute bottom-4 right-4 pointer-events-none select-none">
+                  <span className="text-xs sm:text-sm text-foreground/20 font-display tracking-wide">
+                    Sanatan Pustak Sanghralay
+                  </span>
+                </div>
+              </div>
             )}
           </div>
         </div>
