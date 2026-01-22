@@ -282,15 +282,16 @@ const Reader = () => {
         {/* Footer Navigation */}
         {numPages > 0 && (
           <div className="sticky bottom-0 glass-card border-t border-border/50 px-4 py-3">
-            <div className="container mx-auto flex items-center justify-between">
+            <div className="container mx-auto flex items-center justify-center gap-4 sm:justify-between">
               <Button
                 variant="outline"
+                size="sm"
                 onClick={goToPrevPage}
                 disabled={pageNumber <= 1 || isLocked}
-                className={isLocked ? 'opacity-50 cursor-not-allowed' : ''}
+                className={`${isLocked ? 'opacity-50 cursor-not-allowed' : ''} sm:size-default`}
               >
-                <ChevronLeft className="w-4 h-4 mr-2" />
-                Previous
+                <ChevronLeft className="w-4 h-4 sm:mr-2" />
+                <span className="hidden sm:inline">Previous</span>
               </Button>
 
               <div className="flex items-center gap-2">
@@ -331,19 +332,20 @@ const Reader = () => {
                     }
                   }}
                   disabled={isLocked}
-                  className={`w-16 text-center bg-background border border-border rounded-md px-2 py-1 text-sm ${isLocked ? 'opacity-50 cursor-not-allowed' : ''}`}
+                  className={`w-12 sm:w-16 text-center bg-background border border-border rounded-md px-2 py-1 text-sm ${isLocked ? 'opacity-50 cursor-not-allowed' : ''}`}
                 />
-                <span className="text-sm text-muted-foreground">of {numPages}</span>
+                <span className="text-xs sm:text-sm text-muted-foreground">of {numPages}</span>
               </div>
 
               <Button
                 variant="outline"
+                size="sm"
                 onClick={goToNextPage}
                 disabled={pageNumber >= numPages || isLocked}
-                className={isLocked ? 'opacity-50 cursor-not-allowed' : ''}
+                className={`${isLocked ? 'opacity-50 cursor-not-allowed' : ''} sm:size-default`}
               >
-                Next
-                <ChevronRight className="w-4 h-4 ml-2" />
+                <span className="hidden sm:inline">Next</span>
+                <ChevronRight className="w-4 h-4 sm:ml-2" />
               </Button>
             </div>
           </div>
