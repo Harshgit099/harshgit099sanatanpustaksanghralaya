@@ -6,7 +6,7 @@ import Layout from '@/components/layout/Layout';
 import { Button } from '@/components/ui/button';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
-import { useIsMobile } from '@/hooks/use-mobile';
+
 import 'react-pdf/dist/Page/AnnotationLayer.css';
 import 'react-pdf/dist/Page/TextLayer.css';
 
@@ -25,13 +25,12 @@ const Reader = () => {
   const { id } = useParams<{ id: string }>();
   const { user } = useAuth();
   const navigate = useNavigate();
-  const isMobile = useIsMobile();
   const [scripture, setScripture] = useState<Scripture | null>(null);
   const [loading, setLoading] = useState(true);
   const [numPages, setNumPages] = useState<number>(0);
   const [pageNumber, setPageNumber] = useState<number>(1);
   const [pageInputValue, setPageInputValue] = useState<string>('1');
-  const [scale, setScale] = useState<number | undefined>(undefined);
+  const [scale, setScale] = useState<number>(0.75);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [pdfError, setPdfError] = useState<string | null>(null);
   const [isLocked, setIsLocked] = useState(false);
@@ -72,13 +71,6 @@ const Reader = () => {
 
     fetchScriptureAndProgress();
   }, [id, user]);
-
-  // Set default zoom based on device type
-  useEffect(() => {
-    if (scale === undefined && isMobile !== undefined) {
-      setScale(isMobile ? 0.75 : 1.0);
-    }
-  }, [isMobile, scale]);
 
   useEffect(() => {
     // Save reading progress
