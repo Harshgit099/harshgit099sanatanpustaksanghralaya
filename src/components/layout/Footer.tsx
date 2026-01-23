@@ -5,10 +5,10 @@ const Footer = () => {
   const currentYear = new Date().getFullYear();
 
   const quickLinks = [
-    { name: 'Vedas', href: '/categories/vedas' },
-    { name: 'Puranas', href: '/categories/puranas' },
-    { name: 'Itihasa', href: '/categories/itihasa' },
-    { name: 'Upanishads', href: '/categories/upanishads' },
+    { name: 'Vedas', href: '/library?category=vedas' },
+    { name: 'Puranas', href: '/library?category=puranas' },
+    { name: 'Itihasa', href: '/library?category=itihasa' },
+    { name: 'Darshana', href: '/library?category=darshana' },
   ];
 
   const resources = [
