@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { BookOpen, Clock, User, ArrowLeft, Bookmark, BookmarkCheck, Share2, Star } from 'lucide-react';
-import LanguageSelector from '@/components/scripture/LanguageSelector';
 import AnimatedBookCover from '@/components/scripture/AnimatedBookCover';
 import Layout from '@/components/layout/Layout';
 import { Button } from '@/components/ui/button';
@@ -326,16 +325,6 @@ const Scripture = () => {
                       )}
                     </div>
 
-                    {/* Language Selector */}
-                    {translations.length > 1 && (
-                      <div className="mb-6">
-                        <LanguageSelector
-                          currentLanguage={scripture.language}
-                          translations={translations}
-                          onLanguageChange={handleLanguageChange}
-                        />
-                      </div>
-                    )}
 
                     <div className="flex flex-wrap gap-3">
                       {volumes.length === 0 && (
