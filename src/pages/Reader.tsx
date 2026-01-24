@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef, useCallback } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { Document, Page, pdfjs } from 'react-pdf';
 import { ArrowLeft, ChevronLeft, ChevronRight, ZoomIn, ZoomOut, Maximize2, Minimize2, Lock, Unlock } from 'lucide-react';
@@ -34,6 +34,7 @@ const Reader = () => {
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [pdfError, setPdfError] = useState<string | null>(null);
   const [isLocked, setIsLocked] = useState(false);
+  const readerContainerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const fetchScriptureAndProgress = async () => {
@@ -119,15 +120,27 @@ const Reader = () => {
   const zoomIn = () => setScale((prev) => Math.min((prev ?? 1.0) + 0.25, 2.5));
   const zoomOut = () => setScale((prev) => Math.max((prev ?? 1.0) - 0.25, 0.5));
 
-  const toggleFullscreen = () => {
+  const toggleFullscreen = useCallback(() => {
+    if (!readerContainerRef.current) return;
+    
     if (!document.fullscreenElement) {
-      document.documentElement.requestFullscreen();
-      setIsFullscreen(true);
+      readerContainerRef.current.requestFullscreen().catch((err) => {
+        console.error('Fullscreen error:', err);
+      });
     } else {
       document.exitFullscreen();
-      setIsFullscreen(false);
     }
-  };
+  }, []);
+
+  // Listen for fullscreen changes
+  useEffect(() => {
+    const handleFullscreenChange = () => {
+      setIsFullscreen(!!document.fullscreenElement);
+    };
+
+    document.addEventListener('fullscreenchange', handleFullscreenChange);
+    return () => document.removeEventListener('fullscreenchange', handleFullscreenChange);
+  }, []);
 
   if (loading) {
     return (
@@ -170,7 +183,10 @@ const Reader = () => {
 
   return (
     <Layout>
-      <div className="min-h-screen flex flex-col overflow-x-hidden">
+      <div 
+        ref={readerContainerRef} 
+        className={`min-h-screen flex flex-col overflow-x-hidden ${isFullscreen ? 'bg-background' : ''}`}
+      >
         {/* Header */}
         <div className="sticky top-0 z-50 glass-card border-b border-border/50 px-2 sm:px-4 py-2 sm:py-3">
           <div className="container mx-auto flex items-center justify-between gap-2">
