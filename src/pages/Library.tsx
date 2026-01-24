@@ -65,7 +65,7 @@ const Library = () => {
         );
       }
 
-      const { data: scripturesData, error } = await query.order('title');
+      const { data: scripturesData, error } = await query.order('display_order').order('title');
 
       if (!error && scripturesData) {
         setScriptures(scripturesData);
