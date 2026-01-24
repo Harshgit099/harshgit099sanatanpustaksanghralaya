@@ -134,6 +134,7 @@ export type Database = {
           created_at: string
           description: string | null
           description_hindi: string | null
+          display_order: number | null
           featured: boolean | null
           id: string
           language: string | null
@@ -153,6 +154,7 @@ export type Database = {
           created_at?: string
           description?: string | null
           description_hindi?: string | null
+          display_order?: number | null
           featured?: boolean | null
           id?: string
           language?: string | null
@@ -172,6 +174,7 @@ export type Database = {
           created_at?: string
           description?: string | null
           description_hindi?: string | null
+          display_order?: number | null
           featured?: boolean | null
           id?: string
           language?: string | null
