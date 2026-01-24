@@ -30,7 +30,7 @@ const Reader = () => {
   const [numPages, setNumPages] = useState<number>(0);
   const [pageNumber, setPageNumber] = useState<number>(1);
   const [pageInputValue, setPageInputValue] = useState<string>('1');
-  const [scale, setScale] = useState<number>(0.75);
+  const [scale, setScale] = useState<number>(1.0);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [pdfError, setPdfError] = useState<string | null>(null);
   const [isLocked, setIsLocked] = useState(false);
@@ -263,8 +263,8 @@ const Reader = () => {
         </div>
 
         {/* PDF Viewer */}
-        <div className="flex-1 overflow-x-hidden overflow-y-auto bg-muted/30 py-6 flex items-center">
-          <div className="container mx-auto flex justify-center items-center min-h-full">
+        <div className="flex-1 overflow-x-hidden overflow-y-auto bg-muted/30 py-2 sm:py-4">
+          <div className="w-full flex justify-center">
             {pdfError ? (
               <div className="text-center py-16">
                 <p className="text-muted-foreground mb-4">{pdfError}</p>
