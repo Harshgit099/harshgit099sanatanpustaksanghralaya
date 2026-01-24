@@ -60,6 +60,10 @@ const Scripture = () => {
     const fetchScripture = async () => {
       if (!id) return;
 
+      // Reset state when navigating between scriptures
+      setVolumes([]);
+      setTranslations([]);
+
       const { data, error } = await supabase
         .from('scriptures')
         .select('*')
