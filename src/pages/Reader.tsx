@@ -263,8 +263,8 @@ const Reader = () => {
         </div>
 
         {/* PDF Viewer */}
-        <div className="flex-1 overflow-x-hidden overflow-y-auto bg-muted/30 py-6">
-          <div className="container mx-auto flex justify-center">
+        <div className="flex-1 overflow-x-hidden overflow-y-auto bg-muted/30 py-6 flex items-center">
+          <div className="container mx-auto flex justify-center items-center min-h-full">
             {pdfError ? (
               <div className="text-center py-16">
                 <p className="text-muted-foreground mb-4">{pdfError}</p>
