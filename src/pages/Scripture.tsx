@@ -72,15 +72,28 @@ const Scripture = () => {
       } else {
         setScripture(data);
         
-        // Fetch volumes (child scriptures) if this is a parent
-        const { data: volumesData } = await supabase
-          .from('scriptures')
-          .select('id, title, title_hindi, description, pdf_url')
-          .eq('parent_scripture_id', id)
-          .order('title');
-        
-        if (volumesData) {
-          setVolumes(volumesData);
+        // If this is a child scripture, fetch siblings (other language versions)
+        if (data?.parent_scripture_id) {
+          const { data: siblingsData } = await supabase
+            .from('scriptures')
+            .select('id, language, title')
+            .eq('parent_scripture_id', data.parent_scripture_id)
+            .order('display_order');
+          
+          if (siblingsData && siblingsData.length > 1) {
+            setTranslations(siblingsData);
+          }
+        } else {
+          // Fetch volumes (child scriptures) if this is a parent
+          const { data: volumesData } = await supabase
+            .from('scriptures')
+            .select('id, title, title_hindi, description, pdf_url')
+            .eq('parent_scripture_id', id)
+            .order('display_order');
+          
+          if (volumesData) {
+            setVolumes(volumesData);
+          }
         }
 
         // Fetch available translations (scriptures with same translation_group_id)
@@ -94,9 +107,6 @@ const Scripture = () => {
           if (translationsData) {
             setTranslations(translationsData);
           }
-        } else {
-          // If no translation group, just show the current scripture
-          setTranslations([{ id: data.id, language: data.language, title: data.title }]);
         }
       }
 
