@@ -19,6 +19,8 @@ interface Scripture {
   title_hindi: string | null;
   pdf_url: string | null;
   total_chapters: number | null;
+  category: string | null;
+  subcategory: string | null;
 }
 
 const Reader = () => {
@@ -30,7 +32,7 @@ const Reader = () => {
   const [numPages, setNumPages] = useState<number>(0);
   const [pageNumber, setPageNumber] = useState<number>(1);
   const [pageInputValue, setPageInputValue] = useState<string>('1');
-  const [scale, setScale] = useState<number>(0.75);
+  const [scale, setScale] = useState<number | null>(null);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [pdfError, setPdfError] = useState<string | null>(null);
   const [isLocked, setIsLocked] = useState(false);
@@ -42,7 +44,7 @@ const Reader = () => {
 
       const { data, error } = await supabase
         .from('scriptures')
-        .select('id, title, title_hindi, pdf_url, total_chapters')
+        .select('id, title, title_hindi, pdf_url, total_chapters, category, subcategory')
         .eq('id', id)
         .maybeSingle();
 
@@ -50,6 +52,9 @@ const Reader = () => {
         console.error('Error fetching scripture:', error);
       } else {
         setScripture(data);
+        // Set initial zoom based on scripture type - 175% for Upanishads, 75% for others
+        const isUpanishad = data?.subcategory === 'Upanishads' || data?.title?.toLowerCase().includes('upanishad');
+        setScale(isUpanishad ? 1.75 : 0.75);
       }
 
       // Load saved reading progress
