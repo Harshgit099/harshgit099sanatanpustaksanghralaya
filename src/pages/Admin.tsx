@@ -319,14 +319,14 @@ const Admin = () => {
           <div className="space-y-2">
             <Label htmlFor="parentScripture">Parent Scripture (Optional)</Label>
             <Select
-              value={formData.parentScriptureId}
-              onValueChange={(value) => setFormData({ ...formData, parentScriptureId: value })}
+              value={formData.parentScriptureId || "none"}
+              onValueChange={(value) => setFormData({ ...formData, parentScriptureId: value === "none" ? "" : value })}
             >
               <SelectTrigger>
                 <SelectValue placeholder="Select parent (if this is a child volume)" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">None (Top-level scripture)</SelectItem>
+                <SelectItem value="none">None (Top-level scripture)</SelectItem>
                 {parentScriptures.map((scripture) => (
                   <SelectItem key={scripture.id} value={scripture.id}>
                     {scripture.title}
