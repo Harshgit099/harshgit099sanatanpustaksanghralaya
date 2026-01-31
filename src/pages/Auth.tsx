@@ -260,8 +260,11 @@ const Auth = () => {
                     {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                   </button>
                 </div>
-                {errors.password && (
+              {errors.password && (
                   <p className="text-xs text-destructive">{errors.password}</p>
+                )}
+                {!isLogin && !errors.password && (
+                  <p className="text-xs text-muted-foreground">Password must be 7-9 characters</p>
                 )}
               </div>
             )}
