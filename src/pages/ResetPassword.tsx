@@ -8,7 +8,9 @@ import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 import { z } from 'zod';
 
-const passwordSchema = z.string().min(6, 'Password must be at least 6 characters');
+const passwordSchema = z.string()
+  .min(7, 'Password must be at least 7 characters')
+  .max(9, 'Password must be at most 9 characters');
 
 const ResetPassword = () => {
   const [showPassword, setShowPassword] = useState(false);
