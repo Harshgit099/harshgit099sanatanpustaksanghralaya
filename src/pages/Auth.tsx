@@ -42,12 +42,15 @@ const Auth = () => {
       newErrors.email = emailResult.error.errors[0].message;
     }
 
-    const passwordResult = passwordSchema.safeParse(formData.password);
-    if (!passwordResult.success) {
-      newErrors.password = passwordResult.error.errors[0].message;
+    // Only validate password if not in forgot password mode
+    if (!isForgotPassword) {
+      const passwordResult = passwordSchema.safeParse(formData.password);
+      if (!passwordResult.success) {
+        newErrors.password = passwordResult.error.errors[0].message;
+      }
     }
 
-    if (!isLogin && !formData.fullName.trim()) {
+    if (!isLogin && !isForgotPassword && !formData.fullName.trim()) {
       newErrors.fullName = 'Please enter your full name';
     }
 
