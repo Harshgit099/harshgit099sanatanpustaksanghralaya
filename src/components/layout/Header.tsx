@@ -1,9 +1,10 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Menu, X, Sun, Moon, User, LogOut, BookOpen } from 'lucide-react';
+import { Menu, X, Sun, Moon, User, LogOut, BookOpen, Shield } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/contexts/AuthContext';
 import { useTheme } from '@/contexts/ThemeContext';
+import { supabase } from '@/integrations/supabase/client';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -14,9 +15,27 @@ import {
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isAdminOrMod, setIsAdminOrMod] = useState(false);
   const { user, signOut } = useAuth();
   const { theme, toggleTheme } = useTheme();
   const navigate = useNavigate();
+
+  // Check if user has admin or moderator role
+  useEffect(() => {
+    const checkRole = async () => {
+      if (!user) {
+        setIsAdminOrMod(false);
+        return;
+      }
+
+      const { data } = await supabase
+        .rpc('is_admin_or_moderator', { _user_id: user.id });
+      
+      setIsAdminOrMod(data === true);
+    };
+
+    checkRole();
+  }, [user]);
 
   const navLinks = [
     { name: 'Home', href: '/' },
@@ -90,6 +109,14 @@ const Header = () => {
                       Dashboard
                     </Link>
                   </DropdownMenuItem>
+                  {isAdminOrMod && (
+                    <DropdownMenuItem asChild>
+                      <Link to="/admin" className="flex items-center gap-2">
+                        <Shield className="h-4 w-4" />
+                        Admin Panel
+                      </Link>
+                    </DropdownMenuItem>
+                  )}
                   <DropdownMenuSeparator />
                   <DropdownMenuItem onClick={handleSignOut} className="text-destructive">
                     <LogOut className="h-4 w-4 mr-2" />
