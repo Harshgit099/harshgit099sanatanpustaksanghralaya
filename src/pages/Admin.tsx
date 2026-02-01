@@ -223,7 +223,7 @@ const Admin = () => {
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="titleHindi">Title (Hindi)</Label>
+              <Label htmlFor="titleHindi">Title (Hindi) *</Label>
               <Input
                 id="titleHindi"
                 value={formData.titleHindi}
@@ -234,7 +234,7 @@ const Admin = () => {
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="description">Description (English)</Label>
+            <Label htmlFor="description">Description (English) *</Label>
             <Textarea
               id="description"
               value={formData.description}
@@ -245,7 +245,7 @@ const Admin = () => {
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="descriptionHindi">Description (Hindi)</Label>
+            <Label htmlFor="descriptionHindi">Description (Hindi) *</Label>
             <Textarea
               id="descriptionHindi"
               value={formData.descriptionHindi}

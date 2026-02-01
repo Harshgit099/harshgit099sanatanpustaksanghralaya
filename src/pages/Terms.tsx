@@ -24,7 +24,7 @@ const Terms = () => {
             <section>
               <h2 className="font-display text-xl font-semibold mb-3">Acceptance of Terms</h2>
               <p className="text-muted-foreground leading-relaxed">
-                By accessing and using Sanatan Pustak Sanghralay, you accept and agree to be bound 
+                By accessing and using Sanatan Pustak Sanghralaya, you accept and agree to be bound 
                 by these Terms of Service. If you do not agree to these terms, please do not use 
                 our services.
               </p>
@@ -33,7 +33,7 @@ const Terms = () => {
             <section>
               <h2 className="font-display text-xl font-semibold mb-3">Description of Service</h2>
               <p className="text-muted-foreground leading-relaxed">
-                Sanatan Pustak Sanghralay provides a digital library of Hindu scriptures and 
+                Sanatan Pustak Sanghralaya provides a digital library of Hindu scriptures and 
                 spiritual texts. Our services include access to scripture texts, reading tools, 
                 bookmarking features, and personalized reading progress tracking.
               </p>
@@ -89,7 +89,7 @@ const Terms = () => {
             <section>
               <h2 className="font-display text-xl font-semibold mb-3">Limitation of Liability</h2>
               <p className="text-muted-foreground leading-relaxed">
-                Sanatan Pustak Sanghralay shall not be liable for any indirect, incidental, 
+                Sanatan Pustak Sanghralaya shall not be liable for any indirect, incidental, 
                 special, or consequential damages arising from your use of our services.
               </p>
             </section>
