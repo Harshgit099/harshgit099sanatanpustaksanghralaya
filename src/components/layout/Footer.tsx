@@ -28,7 +28,7 @@ const Footer = () => {
             <Link to="/" className="flex items-center gap-3 mb-4">
               <span className="text-4xl om-symbol">ॐ</span>
               <div>
-                <h3 className="font-display text-xl font-bold">Sanatan Pustak Sanghralay</h3>
+                <h3 className="font-display text-xl font-bold">Sanatan Pustak Sanghralaya</h3>
                 <p className="text-sm text-muted-foreground font-devanagari">सनातन पुस्तक संग्रहालय</p>
               </div>
             </Link>
@@ -109,7 +109,7 @@ const Footer = () => {
         <div className="container mx-auto px-4 py-4">
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
             <p className="text-sm text-muted-foreground">
-              © {currentYear} Sanatan Pustak Sanghralay. All rights reserved.
+              © {currentYear} Sanatan Pustak Sanghralaya. All rights reserved.
             </p>
             <p className="text-sm text-muted-foreground flex items-center gap-1">
               Made with <Heart className="w-4 h-4 text-primary fill-primary" /> for Sanatan Dharma

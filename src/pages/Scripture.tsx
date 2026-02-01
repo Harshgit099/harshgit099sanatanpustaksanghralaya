@@ -188,7 +188,7 @@ const Scripture = () => {
       try {
         await navigator.share({
           title: scripture?.title,
-          text: scripture?.description || `Read ${scripture?.title} on Sanatan Pustak Sanghralay`,
+          text: scripture?.description || `Read ${scripture?.title} on Sanatan Pustak Sanghralaya`,
           url: window.location.href,
         });
       } catch {

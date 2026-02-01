@@ -24,7 +24,7 @@ const Privacy = () => {
             <section>
               <h2 className="font-display text-xl font-semibold mb-3">Introduction</h2>
               <p className="text-muted-foreground leading-relaxed">
-                Sanatan Pustak Sanghralay ("we," "our," or "us") is committed to protecting your privacy. 
+                Sanatan Pustak Sanghralaya ("we," "our," or "us") is committed to protecting your privacy. 
                 This Privacy Policy explains how we collect, use, and safeguard your information when 
                 you visit our website and use our services.
               </p>

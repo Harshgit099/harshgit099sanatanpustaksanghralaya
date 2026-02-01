@@ -139,7 +139,7 @@ const Contact = () => {
                 <div>
                   <h3 className="font-display text-lg font-semibold mb-1">Our Presence</h3>
                   <p className="text-muted-foreground text-sm">
-                    Sanatan Pustak Sanghralay is a digital platform serving seekers 
+                    Sanatan Pustak Sanghralaya is a digital platform serving seekers 
                     of spiritual knowledge worldwide.
                   </p>
                 </div>

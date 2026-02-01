@@ -9,7 +9,7 @@ const About = () => {
         <div className="text-center mb-16">
           <span className="text-6xl om-symbol mb-4 block">ॐ</span>
           <h1 className="font-display text-4xl sm:text-5xl font-bold mb-4">
-            About <span className="text-primary">Sanatan Pustak Sanghralay</span>
+            About <span className="text-primary">Sanatan Pustak Sanghralaya</span>
           </h1>
           <p className="font-devanagari text-xl text-muted-foreground">
             सनातन पुस्तक संग्रहालय के बारे में
@@ -24,7 +24,7 @@ const About = () => {
               Our Mission
             </h2>
             <p className="text-muted-foreground leading-relaxed mb-4">
-              Sanatan Pustak Sanghralay is dedicated to preserving and sharing the timeless wisdom 
+              Sanatan Pustak Sanghralaya is dedicated to preserving and sharing the timeless wisdom 
               of Hindu scriptures with seekers around the world. Our mission is to make ancient 
               texts accessible to everyone, fostering spiritual growth and understanding of 
               Sanatan Dharma.

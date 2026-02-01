@@ -59,7 +59,7 @@ const Header = () => {
             </div>
             <div className="hidden sm:block">
               <h1 className="font-display text-lg font-bold text-foreground group-hover:text-primary transition-colors">
-                Sanatan Pustak Sanghralay
+                Sanatan Pustak Sanghralaya
               </h1>
               <p className="text-xs text-muted-foreground font-devanagari">सनातन पुस्तक संग्रहालय</p>
             </div>

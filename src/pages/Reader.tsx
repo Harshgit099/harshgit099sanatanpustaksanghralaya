@@ -300,7 +300,7 @@ const Reader = () => {
                 {/* Watermark */}
                 <div className="absolute bottom-4 right-4 pointer-events-none select-none">
                   <span className="text-xs sm:text-sm text-foreground/20 font-display tracking-wide">
-                    Sanatan Pustak Sanghralay
+                    Sanatan Pustak Sanghralaya
                   </span>
                 </div>
               </div>
