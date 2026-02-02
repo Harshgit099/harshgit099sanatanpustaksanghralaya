@@ -62,16 +62,16 @@ const BasicsTutorial = ({ isOpen, onClose }: BasicsTutorialProps) => {
           </div>
 
           <div className="flex items-center gap-8">
-            <div className={`flex flex-col items-center gap-2 p-4 rounded-xl transition-all ${theme === 'light' ? 'bg-primary/10 ring-2 ring-primary' : 'bg-muted/50'}`}>
-              <Sun className="h-10 w-10 text-gold" />
-              <span className="text-sm font-medium">Light Mode</span>
+            <div className={`flex flex-col items-center gap-2 p-4 rounded-xl ${theme === 'light' ? 'bg-primary/10 ring-2 ring-primary' : 'bg-muted/50'}`}>
+              <Sun className="h-10 w-10 text-amber-500" />
+              <span className="text-sm font-medium text-foreground">Light Mode</span>
               <p className="text-xs text-muted-foreground text-center">
                 Bright & warm for daytime
               </p>
             </div>
-            <div className={`flex flex-col items-center gap-2 p-4 rounded-xl transition-all ${theme === 'dark' ? 'bg-primary/10 ring-2 ring-primary' : 'bg-muted/50'}`}>
+            <div className={`flex flex-col items-center gap-2 p-4 rounded-xl ${theme === 'dark' ? 'bg-primary/10 ring-2 ring-primary' : 'bg-muted/50'}`}>
               <Moon className="h-10 w-10 text-primary" />
-              <span className="text-sm font-medium">Dark Mode</span>
+              <span className="text-sm font-medium text-foreground">Dark Mode</span>
               <p className="text-xs text-muted-foreground text-center">
                 Easy on eyes at night
               </p>
