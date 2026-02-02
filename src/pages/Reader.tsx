@@ -52,9 +52,17 @@ const Reader = () => {
         console.error('Error fetching scripture:', error);
       } else {
         setScripture(data);
-        // Set initial zoom based on scripture type - 175% for Upanishads, 75% for others
+        // Set initial zoom based on scripture type and device
         const isUpanishad = data?.subcategory === 'Upanishads' || data?.title?.toLowerCase().includes('upanishad');
-        setScale(isUpanishad ? 1.75 : 0.75);
+        const isMobile = window.innerWidth < 768; // Mobile/Android devices
+        
+        if (isUpanishad) {
+          // Upanishads: higher zoom for readability
+          setScale(isMobile ? 1.25 : 1.75);
+        } else {
+          // Other scriptures: desktop gets higher zoom, mobile gets lower
+          setScale(isMobile ? 0.6 : 1.0);
+        }
       }
 
       // Load saved reading progress
