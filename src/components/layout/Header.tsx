@@ -41,6 +41,7 @@ const Header = () => {
     { name: 'Home', href: '/' },
     { name: 'Library', href: '/library' },
     { name: 'Categories', href: '/categories' },
+    { name: 'Subscription', href: '/subscription' },
   ];
 
   const handleSignOut = async () => {
