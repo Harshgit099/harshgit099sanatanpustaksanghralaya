@@ -34,7 +34,7 @@ const BasicsTutorial = ({ isOpen, onClose }: BasicsTutorialProps) => {
 
   const steps = [
     {
-      title: 'Welcome to Sanatan Pustak Sanghralay',
+      title: 'Welcome to Sanatan Pustak Sanghralaya',
       description: 'Let us show you some basics to enhance your reading experience.',
       content: (
         <div className="flex flex-col items-center gap-4">

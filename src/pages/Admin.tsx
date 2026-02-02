@@ -241,6 +241,7 @@ const Admin = () => {
               onChange={(e) => setFormData({ ...formData, description: e.target.value })}
               placeholder="Enter description"
               rows={3}
+              className="resize-none"
             />
           </div>
 
@@ -252,6 +253,7 @@ const Admin = () => {
               onChange={(e) => setFormData({ ...formData, descriptionHindi: e.target.value })}
               placeholder="हिंदी विवरण"
               rows={3}
+              className="resize-none"
             />
           </div>
 
