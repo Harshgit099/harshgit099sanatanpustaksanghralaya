@@ -22,6 +22,7 @@ import Terms from "./pages/Terms";
 import Admin from "./pages/Admin";
 import Subscription from "./pages/Subscription";
 import NotFound from "./pages/NotFound";
+ import CookieConsent from "./components/cookies/CookieConsent";
 
 const queryClient = new QueryClient();
 
@@ -55,6 +56,7 @@ const App = () => (
               
               <Route path="*" element={<NotFound />} />
             </Routes>
+             <CookieConsent />
           </BrowserRouter>
         </TooltipProvider>
       </AuthProvider>
