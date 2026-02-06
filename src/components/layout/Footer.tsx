@@ -80,13 +80,13 @@ const Footer = () => {
             </p>
             <div className="flex gap-4">
               <a
-                href="mailto:contact@sanatanpustak.com"
+                href="mailto:sanatanpustaksanghralaya@zohomail.in"
                 className="w-10 h-10 rounded-full bg-secondary flex items-center justify-center hover:bg-primary hover:text-primary-foreground transition-all"
               >
                 <Mail className="w-5 h-5" />
               </a>
               <a
-                href="https://instagram.com"
+                href="https://www.instagram.com/sanatanpustaksanghralaya?igsh=cXd3enhmOG5ycGZw"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="w-10 h-10 rounded-full bg-secondary flex items-center justify-center hover:bg-primary hover:text-primary-foreground transition-all"
