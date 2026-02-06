@@ -107,8 +107,8 @@ const Terms = () => {
               <h2 className="font-display text-xl font-semibold mb-3">Contact</h2>
               <p className="text-muted-foreground leading-relaxed">
                 For questions about these Terms of Service, please contact us at{' '}
-                <a href="mailto:contact@sanatanpustak.com" className="text-primary hover:underline">
-                  contact@sanatanpustak.com
+                <a href="mailto:sanatanpustaksanghralaya@zohomail.in" className="text-primary hover:underline">
+                  sanatanpustaksanghralaya@zohomail.in
                 </a>
               </p>
             </section>

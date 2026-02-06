@@ -101,8 +101,8 @@ const Privacy = () => {
               <h2 className="font-display text-xl font-semibold mb-3">Contact Us</h2>
               <p className="text-muted-foreground leading-relaxed">
                 If you have any questions about this Privacy Policy, please contact us at{' '}
-                <a href="mailto:contact@sanatanpustak.com" className="text-primary hover:underline">
-                  contact@sanatanpustak.com
+                <a href="mailto:sanatanpustaksanghralaya@zohomail.in" className="text-primary hover:underline">
+                  sanatanpustaksanghralaya@zohomail.in
                 </a>
               </p>
             </section>
