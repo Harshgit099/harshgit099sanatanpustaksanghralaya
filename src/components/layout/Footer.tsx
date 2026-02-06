@@ -78,10 +78,11 @@ const Footer = () => {
             <p className="text-sm text-muted-foreground mb-4">
               Get updates on new scriptures and spiritual insights.
             </p>
-            <div className="flex gap-4">
+            <div className="flex flex-wrap gap-3">
               <a
                 href="mailto:sanatanpustaksanghralaya@zohomail.in"
                 className="w-10 h-10 rounded-full bg-secondary flex items-center justify-center hover:bg-primary hover:text-primary-foreground transition-all"
+                title="Email Us"
               >
                 <Mail className="w-5 h-5" />
               </a>
@@ -90,16 +91,24 @@ const Footer = () => {
                 target="_blank"
                 rel="noopener noreferrer"
                 className="w-10 h-10 rounded-full bg-secondary flex items-center justify-center hover:bg-primary hover:text-primary-foreground transition-all"
+                title="Instagram"
               >
                 <Instagram className="w-5 h-5" />
               </a>
               <a
                 href="/library"
                 className="w-10 h-10 rounded-full bg-secondary flex items-center justify-center hover:bg-primary hover:text-primary-foreground transition-all"
+                title="Library"
               >
                 <BookOpen className="w-5 h-5" />
               </a>
             </div>
+            <a 
+              href="mailto:sanatanpustaksanghralaya@zohomail.in" 
+              className="text-xs text-muted-foreground hover:text-primary transition-colors break-all mt-2 block"
+            >
+              sanatanpustaksanghralaya@zohomail.in
+            </a>
           </div>
         </div>
       </div>
