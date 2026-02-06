@@ -137,8 +137,13 @@ const Admin = () => {
     setUploading(true);
 
     try {
-      // Generate a unique filename
-      const fileName = `${Date.now()}-${pdfFile.name.replace(/\s+/g, '-')}`;
+      // Generate a unique filename - sanitize to remove special characters
+      // Only keep alphanumeric, hyphens, underscores, and dots
+      const sanitizedName = pdfFile.name
+        .replace(/\s+/g, '-')
+        .replace(/[^\w\-\.]/g, '')
+        .replace(/--+/g, '-');
+      const fileName = `${Date.now()}-${sanitizedName || 'scripture.pdf'}`;
       
       // Upload PDF to Supabase Storage
       const { error: uploadError } = await supabase.storage
