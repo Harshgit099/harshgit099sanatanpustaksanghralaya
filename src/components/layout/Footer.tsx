@@ -103,12 +103,6 @@ const Footer = () => {
                 <BookOpen className="w-5 h-5" />
               </a>
             </div>
-            <a 
-              href="mailto:sanatanpustaksanghralaya@zohomail.in" 
-              className="text-xs text-muted-foreground hover:text-primary transition-colors break-all mt-2 block"
-            >
-              sanatanpustaksanghralaya@zohomail.in
-            </a>
           </div>
         </div>
       </div>
