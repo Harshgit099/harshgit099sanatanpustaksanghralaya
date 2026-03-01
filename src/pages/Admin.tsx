@@ -1,12 +1,14 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Upload, FileText, Loader2, Shield, AlertCircle, Bell, Trash2, IndianRupee, Check, X, Mail } from 'lucide-react';
+import { Upload, FileText, Loader2, Shield, AlertCircle, Bell, Trash2, IndianRupee, Check, X, Mail, Pencil, BookOpen } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
 import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
@@ -43,6 +45,20 @@ interface ContactMessage {
   created_at: string;
 }
 
+interface Scripture {
+  id: string;
+  title: string;
+  title_hindi: string | null;
+  description: string | null;
+  description_hindi: string | null;
+  category: string;
+  subcategory: string | null;
+  author: string | null;
+  language: string | null;
+  pdf_url: string | null;
+  parent_scripture_id: string | null;
+}
+
 const Admin = () => {
   const { user, loading: authLoading } = useAuth();
   const navigate = useNavigate();
@@ -73,6 +89,15 @@ const Admin = () => {
   // Contact messages states
   const [contactMessages, setContactMessages] = useState<ContactMessage[]>([]);
 
+  // Scripture management states
+  const [scriptures, setScriptures] = useState<Scripture[]>([]);
+  const [editingScripture, setEditingScripture] = useState<Scripture | null>(null);
+  const [editForm, setEditForm] = useState({
+    title: '', titleHindi: '', description: '', descriptionHindi: '',
+    category: '', subcategory: '', author: '', language: 'hindi', parentScriptureId: '',
+  });
+  const [saving, setSaving] = useState(false);
+
   // Check if user has admin or moderator role
   useEffect(() => {
     const checkAuthorization = async () => {
@@ -90,12 +115,18 @@ const Admin = () => {
       fetchNotifications();
       fetchPaymentRequests();
       fetchContactMessages();
+      fetchScriptures();
     }
   }, [isAuthorized]);
 
   const fetchParentScriptures = async () => {
     const { data } = await supabase.from('scriptures').select('id, title').is('parent_scripture_id', null).order('title');
     if (data) setParentScriptures(data);
+  };
+
+  const fetchScriptures = async () => {
+    const { data } = await supabase.from('scriptures').select('id, title, title_hindi, description, description_hindi, category, subcategory, author, language, pdf_url, parent_scripture_id').order('created_at', { ascending: false });
+    if (data) setScriptures(data);
   };
 
   const fetchNotifications = async () => {
@@ -146,10 +177,67 @@ const Admin = () => {
       setPdfFile(null);
       const fileInput = document.getElementById('pdf-file') as HTMLInputElement;
       if (fileInput) fileInput.value = '';
+      fetchScriptures();
+      fetchParentScriptures();
     } catch (error: any) {
       toast.error(error.message || 'Failed to upload scripture');
     } finally {
       setUploading(false);
+    }
+  };
+
+  const openEditDialog = (s: Scripture) => {
+    setEditingScripture(s);
+    setEditForm({
+      title: s.title,
+      titleHindi: s.title_hindi || '',
+      description: s.description || '',
+      descriptionHindi: s.description_hindi || '',
+      category: s.category,
+      subcategory: s.subcategory || '',
+      author: s.author || '',
+      language: s.language || 'hindi',
+      parentScriptureId: s.parent_scripture_id || '',
+    });
+  };
+
+  const handleEditSave = async () => {
+    if (!editingScripture) return;
+    if (!editForm.title || !editForm.category) { toast.error('Title and Category are required'); return; }
+    setSaving(true);
+    try {
+      const { error } = await supabase.from('scriptures').update({
+        title: editForm.title,
+        title_hindi: editForm.titleHindi || null,
+        description: editForm.description || null,
+        description_hindi: editForm.descriptionHindi || null,
+        category: editForm.category,
+        subcategory: editForm.subcategory || null,
+        author: editForm.author || null,
+        language: editForm.language,
+        parent_scripture_id: editForm.parentScriptureId || null,
+      }).eq('id', editingScripture.id);
+      if (error) throw error;
+      toast.success('Scripture updated successfully!');
+      setEditingScripture(null);
+      fetchScriptures();
+      fetchParentScriptures();
+    } catch (error: any) {
+      toast.error(error.message || 'Failed to update scripture');
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const handleDeleteScripture = async (id: string) => {
+    try {
+      const { error } = await supabase.from('scriptures').delete().eq('id', id);
+      if (error) throw error;
+      toast.success('Scripture deleted successfully!');
+      fetchScriptures();
+      fetchParentScriptures();
+    } catch (error: any) {
+      toast.error(error.message || 'Failed to delete scripture');
     }
   };
 
@@ -258,88 +346,138 @@ const Admin = () => {
             </TabsTrigger>
           </TabsList>
 
-          {/* Scriptures Tab - same as before */}
+          {/* Scriptures Tab */}
           <TabsContent value="scriptures">
-            <form onSubmit={handleSubmit} className="space-y-6 glass-card p-6 rounded-xl">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label htmlFor="title">Title (English) *</Label>
-                  <Input id="title" value={formData.title} onChange={(e) => setFormData({ ...formData, title: e.target.value })} placeholder="Enter title" required />
+            <div className="space-y-6">
+              {/* Upload Form */}
+              <form onSubmit={handleSubmit} className="space-y-6 glass-card p-6 rounded-xl">
+                <h3 className="font-semibold text-foreground flex items-center gap-2"><Upload className="h-5 w-5" />Upload New Scripture</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="title">Title (English) *</Label>
+                    <Input id="title" value={formData.title} onChange={(e) => setFormData({ ...formData, title: e.target.value })} placeholder="Enter title" required />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="titleHindi">Title (Hindi) *</Label>
+                    <Input id="titleHindi" value={formData.titleHindi} onChange={(e) => setFormData({ ...formData, titleHindi: e.target.value })} placeholder="हिंदी शीर्षक" />
+                  </div>
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="titleHindi">Title (Hindi) *</Label>
-                  <Input id="titleHindi" value={formData.titleHindi} onChange={(e) => setFormData({ ...formData, titleHindi: e.target.value })} placeholder="हिंदी शीर्षक" />
+                  <Label htmlFor="description">Description (English) *</Label>
+                  <Textarea id="description" value={formData.description} onChange={(e) => setFormData({ ...formData, description: e.target.value })} placeholder="Enter description" rows={3} className="resize-none" />
                 </div>
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="description">Description (English) *</Label>
-                <Textarea id="description" value={formData.description} onChange={(e) => setFormData({ ...formData, description: e.target.value })} placeholder="Enter description" rows={3} className="resize-none" />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="descriptionHindi">Description (Hindi) *</Label>
-                <Textarea id="descriptionHindi" value={formData.descriptionHindi} onChange={(e) => setFormData({ ...formData, descriptionHindi: e.target.value })} placeholder="हिंदी विवरण" rows={3} className="resize-none" />
-              </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label htmlFor="category">Category *</Label>
-                  <Select value={formData.category} onValueChange={(value) => setFormData({ ...formData, category: value })}>
-                    <SelectTrigger><SelectValue placeholder="Select category" /></SelectTrigger>
+                  <Label htmlFor="descriptionHindi">Description (Hindi) *</Label>
+                  <Textarea id="descriptionHindi" value={formData.descriptionHindi} onChange={(e) => setFormData({ ...formData, descriptionHindi: e.target.value })} placeholder="हिंदी विवरण" rows={3} className="resize-none" />
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="category">Category *</Label>
+                    <Select value={formData.category} onValueChange={(value) => setFormData({ ...formData, category: value })}>
+                      <SelectTrigger><SelectValue placeholder="Select category" /></SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="Vedas">Vedas</SelectItem>
+                        <SelectItem value="Upanishads">Upanishads</SelectItem>
+                        <SelectItem value="Puranas">Puranas</SelectItem>
+                        <SelectItem value="Itihasa">Itihasa</SelectItem>
+                        <SelectItem value="Mantras">Mantras</SelectItem>
+                        <SelectItem value="Stotras">Stotras</SelectItem>
+                        <SelectItem value="Other">Other</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="subcategory">Subcategory</Label>
+                    <Input id="subcategory" value={formData.subcategory} onChange={(e) => setFormData({ ...formData, subcategory: e.target.value })} placeholder="e.g., Upanishads, Mahapurana" />
+                  </div>
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="author">Author</Label>
+                    <Input id="author" value={formData.author} onChange={(e) => setFormData({ ...formData, author: e.target.value })} placeholder="e.g., Vyasa, Valmiki" />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="language">Language</Label>
+                    <Select value={formData.language} onValueChange={(value) => setFormData({ ...formData, language: value })}>
+                      <SelectTrigger><SelectValue placeholder="Select language" /></SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="hindi">Hindi</SelectItem>
+                        <SelectItem value="sanskrit">Sanskrit</SelectItem>
+                        <SelectItem value="english">English</SelectItem>
+                        <SelectItem value="odiya">Odiya</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="parentScripture">Parent Scripture (Optional)</Label>
+                  <Select value={formData.parentScriptureId || "none"} onValueChange={(value) => setFormData({ ...formData, parentScriptureId: value === "none" ? "" : value })}>
+                    <SelectTrigger><SelectValue placeholder="Select parent (if this is a child volume)" /></SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="Vedas">Vedas</SelectItem>
-                      <SelectItem value="Upanishads">Upanishads</SelectItem>
-                      <SelectItem value="Puranas">Puranas</SelectItem>
-                      <SelectItem value="Itihasa">Itihasa</SelectItem>
-                      <SelectItem value="Mantras">Mantras</SelectItem>
-                      <SelectItem value="Stotras">Stotras</SelectItem>
-                      <SelectItem value="Other">Other</SelectItem>
+                      <SelectItem value="none">None (Top-level scripture)</SelectItem>
+                      {parentScriptures.map((s) => <SelectItem key={s.id} value={s.id}>{s.title}</SelectItem>)}
                     </SelectContent>
                   </Select>
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="subcategory">Subcategory</Label>
-                  <Input id="subcategory" value={formData.subcategory} onChange={(e) => setFormData({ ...formData, subcategory: e.target.value })} placeholder="e.g., Upanishads, Mahapurana" />
+                  <Label htmlFor="pdf-file">PDF File *</Label>
+                  <div className="flex items-center gap-4">
+                    <Input id="pdf-file" type="file" accept=".pdf" onChange={handleFileChange} className="flex-1" />
+                    {pdfFile && <div className="flex items-center gap-2 text-sm text-muted-foreground"><FileText className="h-4 w-4" /><span>{pdfFile.name}</span></div>}
+                  </div>
+                  <p className="text-xs text-muted-foreground">Maximum file size: 50MB</p>
                 </div>
+                <Button type="submit" className="w-full" disabled={uploading}>
+                  {uploading ? <><Loader2 className="h-4 w-4 animate-spin mr-2" />Uploading...</> : <><Upload className="h-4 w-4 mr-2" />Upload Scripture</>}
+                </Button>
+              </form>
+
+              {/* Existing Scriptures List */}
+              <div className="glass-card p-6 rounded-xl">
+                <h3 className="font-semibold text-foreground mb-4 flex items-center gap-2"><BookOpen className="h-5 w-5" />Uploaded Scriptures ({scriptures.length})</h3>
+                {scriptures.length === 0 ? <p className="text-muted-foreground text-center py-4">No scriptures uploaded yet</p> : (
+                  <div className="space-y-3">
+                    {scriptures.map((s) => (
+                      <div key={s.id} className="flex items-start justify-between p-3 rounded-lg bg-muted/50 border border-border gap-3">
+                        <div className="flex-1 min-w-0">
+                          <h4 className="font-medium text-sm text-foreground truncate">{s.title}</h4>
+                          {s.title_hindi && <p className="text-xs text-muted-foreground truncate">{s.title_hindi}</p>}
+                          <div className="flex items-center gap-2 mt-1 flex-wrap">
+                            <span className="px-2 py-0.5 rounded text-xs font-medium bg-primary/20 text-primary">{s.category}</span>
+                            {s.language && <span className="px-2 py-0.5 rounded text-xs bg-muted text-muted-foreground capitalize">{s.language}</span>}
+                            {s.parent_scripture_id && <span className="px-2 py-0.5 rounded text-xs bg-accent text-accent-foreground">Child</span>}
+                          </div>
+                        </div>
+                        <div className="flex items-center gap-1 shrink-0">
+                          <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground hover:text-foreground" onClick={() => openEditDialog(s)}>
+                            <Pencil className="h-4 w-4" />
+                          </Button>
+                          <AlertDialog>
+                            <AlertDialogTrigger asChild>
+                              <Button variant="ghost" size="icon" className="h-8 w-8 text-destructive hover:text-destructive hover:bg-destructive/10">
+                                <Trash2 className="h-4 w-4" />
+                              </Button>
+                            </AlertDialogTrigger>
+                            <AlertDialogContent>
+                              <AlertDialogHeader>
+                                <AlertDialogTitle>Delete Scripture</AlertDialogTitle>
+                                <AlertDialogDescription>
+                                  Are you sure you want to delete "<strong>{s.title}</strong>"? This action cannot be undone.
+                                </AlertDialogDescription>
+                              </AlertDialogHeader>
+                              <AlertDialogFooter>
+                                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                <AlertDialogAction onClick={() => handleDeleteScripture(s.id)} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">Delete</AlertDialogAction>
+                              </AlertDialogFooter>
+                            </AlertDialogContent>
+                          </AlertDialog>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label htmlFor="author">Author</Label>
-                  <Input id="author" value={formData.author} onChange={(e) => setFormData({ ...formData, author: e.target.value })} placeholder="e.g., Vyasa, Valmiki" />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="language">Language</Label>
-                  <Select value={formData.language} onValueChange={(value) => setFormData({ ...formData, language: value })}>
-                    <SelectTrigger><SelectValue placeholder="Select language" /></SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="hindi">Hindi</SelectItem>
-                      <SelectItem value="sanskrit">Sanskrit</SelectItem>
-                      <SelectItem value="english">English</SelectItem>
-                      <SelectItem value="odiya">Odiya</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="parentScripture">Parent Scripture (Optional)</Label>
-                <Select value={formData.parentScriptureId || "none"} onValueChange={(value) => setFormData({ ...formData, parentScriptureId: value === "none" ? "" : value })}>
-                  <SelectTrigger><SelectValue placeholder="Select parent (if this is a child volume)" /></SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="none">None (Top-level scripture)</SelectItem>
-                    {parentScriptures.map((s) => <SelectItem key={s.id} value={s.id}>{s.title}</SelectItem>)}
-                  </SelectContent>
-                </Select>
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="pdf-file">PDF File *</Label>
-                <div className="flex items-center gap-4">
-                  <Input id="pdf-file" type="file" accept=".pdf" onChange={handleFileChange} className="flex-1" />
-                  {pdfFile && <div className="flex items-center gap-2 text-sm text-muted-foreground"><FileText className="h-4 w-4" /><span>{pdfFile.name}</span></div>}
-                </div>
-                <p className="text-xs text-muted-foreground">Maximum file size: 50MB</p>
-              </div>
-              <Button type="submit" className="w-full" disabled={uploading}>
-                {uploading ? <><Loader2 className="h-4 w-4 animate-spin mr-2" />Uploading...</> : <><Upload className="h-4 w-4 mr-2" />Upload Scripture</>}
-              </Button>
-            </form>
+            </div>
           </TabsContent>
 
           {/* Notifications Tab */}
@@ -451,6 +589,90 @@ const Admin = () => {
           </TabsContent>
         </Tabs>
       </div>
+
+      {/* Edit Scripture Dialog */}
+      <Dialog open={!!editingScripture} onOpenChange={(open) => !open && setEditingScripture(null)}>
+        <DialogContent className="max-w-lg max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>Edit Scripture</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div className="space-y-1">
+                <Label>Title (English) *</Label>
+                <Input value={editForm.title} onChange={(e) => setEditForm({ ...editForm, title: e.target.value })} />
+              </div>
+              <div className="space-y-1">
+                <Label>Title (Hindi)</Label>
+                <Input value={editForm.titleHindi} onChange={(e) => setEditForm({ ...editForm, titleHindi: e.target.value })} />
+              </div>
+            </div>
+            <div className="space-y-1">
+              <Label>Description (English)</Label>
+              <Textarea value={editForm.description} onChange={(e) => setEditForm({ ...editForm, description: e.target.value })} rows={2} className="resize-none" />
+            </div>
+            <div className="space-y-1">
+              <Label>Description (Hindi)</Label>
+              <Textarea value={editForm.descriptionHindi} onChange={(e) => setEditForm({ ...editForm, descriptionHindi: e.target.value })} rows={2} className="resize-none" />
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div className="space-y-1">
+                <Label>Category *</Label>
+                <Select value={editForm.category} onValueChange={(value) => setEditForm({ ...editForm, category: value })}>
+                  <SelectTrigger><SelectValue /></SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="Vedas">Vedas</SelectItem>
+                    <SelectItem value="Upanishads">Upanishads</SelectItem>
+                    <SelectItem value="Puranas">Puranas</SelectItem>
+                    <SelectItem value="Itihasa">Itihasa</SelectItem>
+                    <SelectItem value="Mantras">Mantras</SelectItem>
+                    <SelectItem value="Stotras">Stotras</SelectItem>
+                    <SelectItem value="Other">Other</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="space-y-1">
+                <Label>Subcategory</Label>
+                <Input value={editForm.subcategory} onChange={(e) => setEditForm({ ...editForm, subcategory: e.target.value })} />
+              </div>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div className="space-y-1">
+                <Label>Author</Label>
+                <Input value={editForm.author} onChange={(e) => setEditForm({ ...editForm, author: e.target.value })} />
+              </div>
+              <div className="space-y-1">
+                <Label>Language</Label>
+                <Select value={editForm.language} onValueChange={(value) => setEditForm({ ...editForm, language: value })}>
+                  <SelectTrigger><SelectValue /></SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="hindi">Hindi</SelectItem>
+                    <SelectItem value="sanskrit">Sanskrit</SelectItem>
+                    <SelectItem value="english">English</SelectItem>
+                    <SelectItem value="odiya">Odiya</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+            <div className="space-y-1">
+              <Label>Parent Scripture</Label>
+              <Select value={editForm.parentScriptureId || "none"} onValueChange={(value) => setEditForm({ ...editForm, parentScriptureId: value === "none" ? "" : value })}>
+                <SelectTrigger><SelectValue /></SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="none">None (Top-level)</SelectItem>
+                  {parentScriptures.filter(p => p.id !== editingScripture?.id).map((s) => <SelectItem key={s.id} value={s.id}>{s.title}</SelectItem>)}
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setEditingScripture(null)}>Cancel</Button>
+            <Button onClick={handleEditSave} disabled={saving}>
+              {saving ? <><Loader2 className="h-4 w-4 animate-spin mr-2" />Saving...</> : 'Save Changes'}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </Layout>
   );
 };
