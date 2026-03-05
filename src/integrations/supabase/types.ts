@@ -158,7 +158,10 @@ export type Database = {
           dark_mode: boolean | null
           full_name: string | null
           id: string
+          is_subscribed: boolean | null
           preferred_language: string | null
+          subscription_end: string | null
+          subscription_start: string | null
           updated_at: string
           user_id: string
         }
@@ -168,7 +171,10 @@ export type Database = {
           dark_mode?: boolean | null
           full_name?: string | null
           id?: string
+          is_subscribed?: boolean | null
           preferred_language?: string | null
+          subscription_end?: string | null
+          subscription_start?: string | null
           updated_at?: string
           user_id: string
         }
@@ -178,7 +184,10 @@ export type Database = {
           dark_mode?: boolean | null
           full_name?: string | null
           id?: string
+          is_subscribed?: boolean | null
           preferred_language?: string | null
+          subscription_end?: string | null
+          subscription_start?: string | null
           updated_at?: string
           user_id?: string
         }
