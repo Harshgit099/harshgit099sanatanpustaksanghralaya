@@ -278,6 +278,31 @@ const Admin = () => {
       }
       const { error } = await supabase.from('payment_requests').update(updateData).eq('id', id);
       if (error) throw error;
+
+      // If verified, update the user's profile with subscription dates
+      if (newStatus === 'verified') {
+        const payment = paymentRequests.find(p => p.id === id);
+        if (payment) {
+          const subscriptionStart = new Date();
+          const subscriptionEnd = new Date();
+          subscriptionEnd.setMonth(subscriptionEnd.getMonth() + 1);
+
+          const { error: profileError } = await supabase
+            .from('profiles')
+            .update({
+              is_subscribed: true,
+              subscription_start: subscriptionStart.toISOString(),
+              subscription_end: subscriptionEnd.toISOString(),
+            } as any)
+            .eq('user_id', payment.user_id);
+
+          if (profileError) {
+            console.error('Failed to update subscription:', profileError);
+            toast.error('Payment verified but failed to activate subscription');
+          }
+        }
+      }
+
       toast.success(`Payment ${newStatus}`);
       fetchPaymentRequests();
     } catch (error: any) {
