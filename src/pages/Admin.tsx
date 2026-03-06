@@ -359,6 +359,7 @@ const Admin = () => {
           <div>
             <h1 className="text-2xl font-bold text-foreground">Admin Panel</h1>
             <p className="text-muted-foreground">Manage scriptures, notifications, payments & messages</p>
+          </div>
         </div>
 
         <Tabs defaultValue="scriptures" className="w-full">
