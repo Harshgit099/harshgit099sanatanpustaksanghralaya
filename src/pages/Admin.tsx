@@ -99,6 +99,7 @@ const Admin = () => {
   const [editForm, setEditForm] = useState({
     title: '', titleHindi: '', description: '', descriptionHindi: '',
     category: '', subcategory: '', author: '', language: 'hindi', parentScriptureId: '',
+    totalChapters: '', totalVerses: '',
   });
   const [saving, setSaving] = useState(false);
 
