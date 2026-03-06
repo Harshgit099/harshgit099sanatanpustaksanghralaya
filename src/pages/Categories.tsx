@@ -67,10 +67,23 @@ const categories = [
 ];
 
 const Categories = () => {
+  const navigate = useNavigate();
+
   return (
     <Layout>
       <div className="min-h-screen py-8">
         <div className="container mx-auto px-4">
+          {/* Back Button */}
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => navigate(-1)}
+            className="mb-4 opacity-0 animate-fade-in"
+          >
+            <ArrowLeft className="w-4 h-4 mr-2" />
+            Back
+          </Button>
+
           {/* Header */}
           <div className="text-center mb-12">
             <h1 className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold mb-4 opacity-0 animate-fade-in">

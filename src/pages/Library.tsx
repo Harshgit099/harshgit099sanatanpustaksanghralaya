@@ -39,6 +39,7 @@ const categories = [
 
 const Library = () => {
   const [searchParams, setSearchParams] = useSearchParams();
+  const navigate = useNavigate();
   const [scriptures, setScriptures] = useState<Scripture[]>([]);
   const [progress, setProgress] = useState<Record<string, number>>({});
   const [loading, setLoading] = useState(true);
@@ -46,6 +47,9 @@ const Library = () => {
   const [selectedCategory, setSelectedCategory] = useState(searchParams.get('category') || 'All');
   const [showFilters, setShowFilters] = useState(false);
   const { user } = useAuth();
+
+  // Check if navigated from categories page (has category param)
+  const isFromCategory = !!searchParams.get('category');
 
   useEffect(() => {
     const fetchData = async () => {
