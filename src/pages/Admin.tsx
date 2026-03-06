@@ -205,6 +205,8 @@ const Admin = () => {
       author: s.author || '',
       language: s.language || 'hindi',
       parentScriptureId: s.parent_scripture_id || '',
+      totalChapters: s.total_chapters?.toString() || '',
+      totalVerses: s.total_verses?.toString() || '',
     });
   };
 
