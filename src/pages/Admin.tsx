@@ -710,6 +710,16 @@ const Admin = () => {
                 </SelectContent>
               </Select>
             </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div className="space-y-1">
+                <Label>Total Chapters</Label>
+                <Input type="number" min="0" value={editForm.totalChapters} onChange={(e) => setEditForm({ ...editForm, totalChapters: e.target.value })} placeholder="e.g., 18" />
+              </div>
+              <div className="space-y-1">
+                <Label>Total Verses</Label>
+                <Input type="number" min="0" value={editForm.totalVerses} onChange={(e) => setEditForm({ ...editForm, totalVerses: e.target.value })} placeholder="e.g., 700" />
+              </div>
+            </div>
           </div>
           <DialogFooter>
             <Button variant="outline" onClick={() => setEditingScripture(null)}>Cancel</Button>
