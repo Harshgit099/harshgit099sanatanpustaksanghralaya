@@ -57,6 +57,8 @@ interface Scripture {
   language: string | null;
   pdf_url: string | null;
   parent_scripture_id: string | null;
+  total_chapters: number | null;
+  total_verses: number | null;
 }
 
 const Admin = () => {
@@ -74,6 +76,8 @@ const Admin = () => {
     author: '',
     language: 'hindi',
     parentScriptureId: '',
+    totalChapters: '',
+    totalVerses: '',
   });
   const [pdfFile, setPdfFile] = useState<File | null>(null);
   const [parentScriptures, setParentScriptures] = useState<Array<{ id: string; title: string }>>([]);
@@ -95,6 +99,7 @@ const Admin = () => {
   const [editForm, setEditForm] = useState({
     title: '', titleHindi: '', description: '', descriptionHindi: '',
     category: '', subcategory: '', author: '', language: 'hindi', parentScriptureId: '',
+    totalChapters: '', totalVerses: '',
   });
   const [saving, setSaving] = useState(false);
 
@@ -125,7 +130,7 @@ const Admin = () => {
   };
 
   const fetchScriptures = async () => {
-    const { data } = await supabase.from('scriptures').select('id, title, title_hindi, description, description_hindi, category, subcategory, author, language, pdf_url, parent_scripture_id').order('created_at', { ascending: false });
+    const { data } = await supabase.from('scriptures').select('id, title, title_hindi, description, description_hindi, category, subcategory, author, language, pdf_url, parent_scripture_id, total_chapters, total_verses').order('created_at', { ascending: false });
     if (data) setScriptures(data);
   };
 
@@ -170,10 +175,12 @@ const Admin = () => {
         category: formData.category, subcategory: formData.subcategory || null,
         author: formData.author || null, language: formData.language,
         pdf_url: urlData.publicUrl, parent_scripture_id: formData.parentScriptureId || null,
+        total_chapters: formData.totalChapters ? parseInt(formData.totalChapters) : null,
+        total_verses: formData.totalVerses ? parseInt(formData.totalVerses) : null,
       });
       if (insertError) throw insertError;
       toast.success('Scripture uploaded successfully!');
-      setFormData({ title: '', titleHindi: '', description: '', descriptionHindi: '', category: '', subcategory: '', author: '', language: 'hindi', parentScriptureId: '' });
+      setFormData({ title: '', titleHindi: '', description: '', descriptionHindi: '', category: '', subcategory: '', author: '', language: 'hindi', parentScriptureId: '', totalChapters: '', totalVerses: '' });
       setPdfFile(null);
       const fileInput = document.getElementById('pdf-file') as HTMLInputElement;
       if (fileInput) fileInput.value = '';
@@ -198,6 +205,8 @@ const Admin = () => {
       author: s.author || '',
       language: s.language || 'hindi',
       parentScriptureId: s.parent_scripture_id || '',
+      totalChapters: s.total_chapters?.toString() || '',
+      totalVerses: s.total_verses?.toString() || '',
     });
   };
 
@@ -216,6 +225,8 @@ const Admin = () => {
         author: editForm.author || null,
         language: editForm.language,
         parent_scripture_id: editForm.parentScriptureId || null,
+        total_chapters: editForm.totalChapters ? parseInt(editForm.totalChapters) : null,
+        total_verses: editForm.totalVerses ? parseInt(editForm.totalVerses) : null,
       }).eq('id', editingScripture.id);
       if (error) throw error;
       toast.success('Scripture updated successfully!');
@@ -443,6 +454,16 @@ const Admin = () => {
                       {parentScriptures.map((s) => <SelectItem key={s.id} value={s.id}>{s.title}</SelectItem>)}
                     </SelectContent>
                   </Select>
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="totalChapters">Total Chapters</Label>
+                    <Input id="totalChapters" type="number" min="0" value={formData.totalChapters} onChange={(e) => setFormData({ ...formData, totalChapters: e.target.value })} placeholder="e.g., 18" />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="totalVerses">Total Verses</Label>
+                    <Input id="totalVerses" type="number" min="0" value={formData.totalVerses} onChange={(e) => setFormData({ ...formData, totalVerses: e.target.value })} placeholder="e.g., 700" />
+                  </div>
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="pdf-file">PDF File *</Label>
@@ -688,6 +709,16 @@ const Admin = () => {
                   {parentScriptures.filter(p => p.id !== editingScripture?.id).map((s) => <SelectItem key={s.id} value={s.id}>{s.title}</SelectItem>)}
                 </SelectContent>
               </Select>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div className="space-y-1">
+                <Label>Total Chapters</Label>
+                <Input type="number" min="0" value={editForm.totalChapters} onChange={(e) => setEditForm({ ...editForm, totalChapters: e.target.value })} placeholder="e.g., 18" />
+              </div>
+              <div className="space-y-1">
+                <Label>Total Verses</Label>
+                <Input type="number" min="0" value={editForm.totalVerses} onChange={(e) => setEditForm({ ...editForm, totalVerses: e.target.value })} placeholder="e.g., 700" />
+              </div>
             </div>
           </div>
           <DialogFooter>
