@@ -225,6 +225,8 @@ const Admin = () => {
         author: editForm.author || null,
         language: editForm.language,
         parent_scripture_id: editForm.parentScriptureId || null,
+        total_chapters: editForm.totalChapters ? parseInt(editForm.totalChapters) : null,
+        total_verses: editForm.totalVerses ? parseInt(editForm.totalVerses) : null,
       }).eq('id', editingScripture.id);
       if (error) throw error;
       toast.success('Scripture updated successfully!');
