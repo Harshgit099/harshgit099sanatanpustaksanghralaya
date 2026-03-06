@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
-import { Search, Filter, X, BookOpen } from 'lucide-react';
+import { useSearchParams, useNavigate } from 'react-router-dom';
+import { Search, Filter, X, BookOpen, ArrowLeft } from 'lucide-react';
 import Layout from '@/components/layout/Layout';
 import ScriptureCard from '@/components/scripture/ScriptureCard';
 import { Button } from '@/components/ui/button';
@@ -39,6 +39,7 @@ const categories = [
 
 const Library = () => {
   const [searchParams, setSearchParams] = useSearchParams();
+  const navigate = useNavigate();
   const [scriptures, setScriptures] = useState<Scripture[]>([]);
   const [progress, setProgress] = useState<Record<string, number>>({});
   const [loading, setLoading] = useState(true);
@@ -46,6 +47,9 @@ const Library = () => {
   const [selectedCategory, setSelectedCategory] = useState(searchParams.get('category') || 'All');
   const [showFilters, setShowFilters] = useState(false);
   const { user } = useAuth();
+
+  // Check if navigated from categories page (has category param)
+  const isFromCategory = !!searchParams.get('category');
 
   useEffect(() => {
     const fetchData = async () => {
@@ -127,66 +131,88 @@ const Library = () => {
     <Layout>
       <div className="min-h-screen py-8">
         <div className="container mx-auto px-4">
+          {/* Back Button */}
+          {isFromCategory && (
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => navigate(-1)}
+              className="mb-4 opacity-0 animate-fade-in"
+            >
+              <ArrowLeft className="w-4 h-4 mr-2" />
+              Back
+            </Button>
+          )}
+
           {/* Header */}
           <div className="mb-8">
             <h1 className="font-display text-3xl sm:text-4xl font-bold mb-2 opacity-0 animate-fade-in">
-              Scripture <span className="text-primary">Library</span>
+              {isFromCategory ? (
+                <>{selectedCategory} <span className="text-primary">Scriptures</span></>
+              ) : (
+                <>Scripture <span className="text-primary">Library</span></>
+              )}
             </h1>
             <p className="text-muted-foreground opacity-0 animate-fade-in animation-delay-100">
-              Explore our collection of sacred Hindu texts
+              {isFromCategory 
+                ? `Browsing scriptures in the ${selectedCategory} category`
+                : 'Explore our collection of sacred Hindu texts'
+              }
             </p>
           </div>
 
-          {/* Search & Filters */}
-          <div className="mb-8 space-y-4 opacity-0 animate-fade-in animation-delay-200">
-            <form onSubmit={handleSearch} className="flex gap-2">
-              <div className="relative flex-1">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-                <Input
-                  type="text"
-                  placeholder="Search scriptures, authors..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pl-10"
-                />
-              </div>
-              <Button type="submit">Search</Button>
-              <Button
-                type="button"
-                variant="outline"
-                className="lg:hidden"
-                onClick={() => setShowFilters(!showFilters)}
-              >
-                <Filter className="w-4 h-4" />
-              </Button>
-            </form>
+          {/* Search & Filters - only show on main library page */}
+          {!isFromCategory && (
+            <div className="mb-8 space-y-4 opacity-0 animate-fade-in animation-delay-200">
+              <form onSubmit={handleSearch} className="flex gap-2">
+                <div className="relative flex-1">
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                  <Input
+                    type="text"
+                    placeholder="Search scriptures, authors..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="pl-10"
+                  />
+                </div>
+                <Button type="submit">Search</Button>
+                <Button
+                  type="button"
+                  variant="outline"
+                  className="lg:hidden"
+                  onClick={() => setShowFilters(!showFilters)}
+                >
+                  <Filter className="w-4 h-4" />
+                </Button>
+              </form>
 
-            {/* Category Filters */}
-            <div className={`flex flex-wrap gap-2 ${showFilters ? 'block' : 'hidden lg:flex'}`}>
-              {categories.map((category) => (
-                <Button
-                  key={category}
-                  variant={selectedCategory === category ? 'default' : 'outline'}
-                  size="sm"
-                  onClick={() => handleCategoryChange(category)}
-                  className="rounded-full"
-                >
-                  {category}
-                </Button>
-              ))}
-              {(searchQuery || selectedCategory !== 'All') && (
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={clearFilters}
-                  className="text-destructive hover:text-destructive"
-                >
-                  <X className="w-4 h-4 mr-1" />
-                  Clear
-                </Button>
-              )}
+              {/* Category Filters */}
+              <div className={`flex flex-wrap gap-2 ${showFilters ? 'block' : 'hidden lg:flex'}`}>
+                {categories.map((category) => (
+                  <Button
+                    key={category}
+                    variant={selectedCategory === category ? 'default' : 'outline'}
+                    size="sm"
+                    onClick={() => handleCategoryChange(category)}
+                    className="rounded-full"
+                  >
+                    {category}
+                  </Button>
+                ))}
+                {(searchQuery || selectedCategory !== 'All') && (
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={clearFilters}
+                    className="text-destructive hover:text-destructive"
+                  >
+                    <X className="w-4 h-4 mr-1" />
+                    Clear
+                  </Button>
+                )}
+              </div>
             </div>
-          </div>
+          )}
 
           {/* Results */}
           {loading ? (
