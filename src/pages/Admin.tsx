@@ -57,6 +57,8 @@ interface Scripture {
   language: string | null;
   pdf_url: string | null;
   parent_scripture_id: string | null;
+  total_chapters: number | null;
+  total_verses: number | null;
 }
 
 const Admin = () => {
