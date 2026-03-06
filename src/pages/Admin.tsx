@@ -455,6 +455,16 @@ const Admin = () => {
                     </SelectContent>
                   </Select>
                 </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="totalChapters">Total Chapters</Label>
+                    <Input id="totalChapters" type="number" min="0" value={formData.totalChapters} onChange={(e) => setFormData({ ...formData, totalChapters: e.target.value })} placeholder="e.g., 18" />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="totalVerses">Total Verses</Label>
+                    <Input id="totalVerses" type="number" min="0" value={formData.totalVerses} onChange={(e) => setFormData({ ...formData, totalVerses: e.target.value })} placeholder="e.g., 700" />
+                  </div>
+                </div>
                 <div className="space-y-2">
                   <Label htmlFor="pdf-file">PDF File *</Label>
                   <div className="flex items-center gap-4">
