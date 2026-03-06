@@ -359,18 +359,8 @@ const Admin = () => {
           <div>
             <h1 className="text-2xl font-bold text-foreground">Admin Panel</h1>
             <p className="text-muted-foreground">Manage scriptures, notifications, payments & messages</p>
-          </div>
-                </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="totalChapters">Total Chapters</Label>
-                    <Input id="totalChapters" type="number" min="0" value={formData.totalChapters} onChange={(e) => setFormData({ ...formData, totalChapters: e.target.value })} placeholder="e.g., 18" />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="totalVerses">Total Verses</Label>
-                    <Input id="totalVerses" type="number" min="0" value={formData.totalVerses} onChange={(e) => setFormData({ ...formData, totalVerses: e.target.value })} placeholder="e.g., 700" />
-                  </div>
-                </div>
+        </div>
+
         <Tabs defaultValue="scriptures" className="w-full">
           <TabsList className="grid w-full grid-cols-4 mb-6">
             <TabsTrigger value="scriptures" className="flex items-center gap-1 text-xs sm:text-sm">
