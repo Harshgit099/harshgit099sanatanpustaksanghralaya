@@ -180,7 +180,7 @@ const Admin = () => {
       });
       if (insertError) throw insertError;
       toast.success('Scripture uploaded successfully!');
-      setFormData({ title: '', titleHindi: '', description: '', descriptionHindi: '', category: '', subcategory: '', author: '', language: 'hindi', parentScriptureId: '' });
+      setFormData({ title: '', titleHindi: '', description: '', descriptionHindi: '', category: '', subcategory: '', author: '', language: 'hindi', parentScriptureId: '', totalChapters: '', totalVerses: '' });
       setPdfFile(null);
       const fileInput = document.getElementById('pdf-file') as HTMLInputElement;
       if (fileInput) fileInput.value = '';
