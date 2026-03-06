@@ -175,6 +175,8 @@ const Admin = () => {
         category: formData.category, subcategory: formData.subcategory || null,
         author: formData.author || null, language: formData.language,
         pdf_url: urlData.publicUrl, parent_scripture_id: formData.parentScriptureId || null,
+        total_chapters: formData.totalChapters ? parseInt(formData.totalChapters) : null,
+        total_verses: formData.totalVerses ? parseInt(formData.totalVerses) : null,
       });
       if (insertError) throw insertError;
       toast.success('Scripture uploaded successfully!');
