@@ -76,6 +76,8 @@ const Admin = () => {
     author: '',
     language: 'hindi',
     parentScriptureId: '',
+    totalChapters: '',
+    totalVerses: '',
   });
   const [pdfFile, setPdfFile] = useState<File | null>(null);
   const [parentScriptures, setParentScriptures] = useState<Array<{ id: string; title: string }>>([]);
