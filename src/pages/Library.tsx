@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
-import { Search, Filter, X, BookOpen } from 'lucide-react';
+import { useSearchParams, useNavigate } from 'react-router-dom';
+import { Search, Filter, X, BookOpen, ArrowLeft } from 'lucide-react';
 import Layout from '@/components/layout/Layout';
 import ScriptureCard from '@/components/scripture/ScriptureCard';
 import { Button } from '@/components/ui/button';

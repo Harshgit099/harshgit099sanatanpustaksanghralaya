@@ -1,5 +1,6 @@
-import { Link } from 'react-router-dom';
-import { BookOpen, ScrollText, Flame, Stars, Compass, Mountain, ArrowRight } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
+import { BookOpen, ScrollText, Flame, Stars, Compass, Mountain, ArrowRight, ArrowLeft } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 import Layout from '@/components/layout/Layout';
 
 const categories = [
