@@ -179,6 +179,7 @@ const Admin = () => {
         pdf_url: urlData.publicUrl, parent_scripture_id: formData.parentScriptureId || null,
         total_chapters: formData.totalChapters ? parseInt(formData.totalChapters) : null,
         total_verses: formData.totalVerses ? parseInt(formData.totalVerses) : null,
+        credits: formData.credits || null,
       });
       if (insertError) throw insertError;
       toast.success('Scripture uploaded successfully!');
