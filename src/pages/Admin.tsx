@@ -729,6 +729,10 @@ const Admin = () => {
                 <Input type="number" min="0" value={editForm.totalVerses} onChange={(e) => setEditForm({ ...editForm, totalVerses: e.target.value })} placeholder="e.g., 700" />
               </div>
             </div>
+            <div className="space-y-1">
+              <Label>Credits</Label>
+              <Textarea value={editForm.credits} onChange={(e) => setEditForm({ ...editForm, credits: e.target.value })} placeholder="Enter credits / acknowledgements" rows={3} className="resize-none" />
+            </div>
           </div>
           <DialogFooter>
             <Button variant="outline" onClick={() => setEditingScripture(null)}>Cancel</Button>
