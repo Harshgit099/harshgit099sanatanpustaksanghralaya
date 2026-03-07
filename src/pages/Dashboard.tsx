@@ -134,7 +134,7 @@ const Dashboard = () => {
     return (
       <Layout>
         <div className="min-h-screen flex items-center justify-center">
-          <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin" />
+          <span className="text-3xl om-symbol animate-om-spin text-primary">ॐ</span>
         </div>
       </Layout>
     );

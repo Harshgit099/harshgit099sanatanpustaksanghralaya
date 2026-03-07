@@ -136,6 +136,10 @@ export default {
           "0%": { transform: "rotate(0deg)" },
           "100%": { transform: "rotate(360deg)" },
         },
+        "om-spin": {
+          "0%": { transform: "rotate(0deg)" },
+          "100%": { transform: "rotate(360deg)" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
@@ -153,6 +157,7 @@ export default {
         glow: "glow 2s ease-in-out infinite",
         float: "float 3s ease-in-out infinite",
         "spin-slow": "spin-slow 8s linear infinite",
+        "om-spin": "om-spin 2s linear infinite",
       },
     },
   },
