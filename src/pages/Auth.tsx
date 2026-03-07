@@ -10,8 +10,7 @@ import { z } from 'zod';
 
 const emailSchema = z.string().email('Please enter a valid email address');
 const passwordSchema = z.string()
-  .min(7, 'Password must be at least 7 characters')
-  .max(9, 'Password must be at most 9 characters');
+  .min(7, 'Password must be at least 7 characters');
 
 const Auth = () => {
   const [isLogin, setIsLogin] = useState(true);
