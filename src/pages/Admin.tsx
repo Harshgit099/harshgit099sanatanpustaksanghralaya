@@ -59,6 +59,7 @@ interface Scripture {
   parent_scripture_id: string | null;
   total_chapters: number | null;
   total_verses: number | null;
+  credits: string | null;
 }
 
 const Admin = () => {
