@@ -182,7 +182,7 @@ const Admin = () => {
       });
       if (insertError) throw insertError;
       toast.success('Scripture uploaded successfully!');
-      setFormData({ title: '', titleHindi: '', description: '', descriptionHindi: '', category: '', subcategory: '', author: '', language: 'hindi', parentScriptureId: '', totalChapters: '', totalVerses: '' });
+      setFormData({ title: '', titleHindi: '', description: '', descriptionHindi: '', category: '', subcategory: '', author: '', language: 'hindi', parentScriptureId: '', totalChapters: '', totalVerses: '', credits: '' });
       setPdfFile(null);
       const fileInput = document.getElementById('pdf-file') as HTMLInputElement;
       if (fileInput) fileInput.value = '';
