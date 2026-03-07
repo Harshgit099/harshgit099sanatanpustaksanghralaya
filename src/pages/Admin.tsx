@@ -132,7 +132,7 @@ const Admin = () => {
   };
 
   const fetchScriptures = async () => {
-    const { data } = await supabase.from('scriptures').select('id, title, title_hindi, description, description_hindi, category, subcategory, author, language, pdf_url, parent_scripture_id, total_chapters, total_verses').order('created_at', { ascending: false });
+    const { data } = await supabase.from('scriptures').select('id, title, title_hindi, description, description_hindi, category, subcategory, author, language, pdf_url, parent_scripture_id, total_chapters, total_verses, credits').order('created_at', { ascending: false });
     if (data) setScriptures(data);
   };
 
