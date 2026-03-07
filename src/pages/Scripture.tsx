@@ -23,6 +23,7 @@ interface Scripture {
   total_verses: number | null;
   featured: boolean | null;
   parent_scripture_id: string | null;
+  credits: string | null;
 }
 
 interface Volume {
