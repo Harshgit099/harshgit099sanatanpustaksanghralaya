@@ -1,0 +1,1 @@
+ALTER TABLE public.scriptures ADD COLUMN credits text DEFAULT NULL;

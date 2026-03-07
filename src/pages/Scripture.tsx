@@ -23,6 +23,7 @@ interface Scripture {
   total_verses: number | null;
   featured: boolean | null;
   parent_scripture_id: string | null;
+  credits: string | null;
 }
 
 interface Volume {
@@ -398,6 +399,19 @@ const Scripture = () => {
                   </p>
                 )}
               </div>
+
+              {/* Credits Section */}
+              {scripture.credits && (
+                <div className="glass-card rounded-2xl p-6 mt-6 border border-primary/20">
+                  <h2 className="font-display text-xl font-semibold mb-4 flex items-center gap-2">
+                    <span className="om-symbol text-primary">ॐ</span>
+                    Credits
+                  </h2>
+                  <p className="text-muted-foreground leading-relaxed whitespace-pre-wrap">
+                    {scripture.credits}
+                  </p>
+                </div>
+              )}
             </div>
 
             {/* Sidebar */}

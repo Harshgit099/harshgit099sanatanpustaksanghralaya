@@ -240,6 +240,7 @@ export type Database = {
           category: string
           cover_image: string | null
           created_at: string
+          credits: string | null
           description: string | null
           description_hindi: string | null
           display_order: number | null
@@ -260,6 +261,7 @@ export type Database = {
           category: string
           cover_image?: string | null
           created_at?: string
+          credits?: string | null
           description?: string | null
           description_hindi?: string | null
           display_order?: number | null
@@ -280,6 +282,7 @@ export type Database = {
           category?: string
           cover_image?: string | null
           created_at?: string
+          credits?: string | null
           description?: string | null
           description_hindi?: string | null
           display_order?: number | null

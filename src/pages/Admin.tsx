@@ -59,6 +59,7 @@ interface Scripture {
   parent_scripture_id: string | null;
   total_chapters: number | null;
   total_verses: number | null;
+  credits: string | null;
 }
 
 const Admin = () => {
@@ -78,6 +79,7 @@ const Admin = () => {
     parentScriptureId: '',
     totalChapters: '',
     totalVerses: '',
+    credits: '',
   });
   const [pdfFile, setPdfFile] = useState<File | null>(null);
   const [parentScriptures, setParentScriptures] = useState<Array<{ id: string; title: string }>>([]);
@@ -99,7 +101,7 @@ const Admin = () => {
   const [editForm, setEditForm] = useState({
     title: '', titleHindi: '', description: '', descriptionHindi: '',
     category: '', subcategory: '', author: '', language: 'hindi', parentScriptureId: '',
-    totalChapters: '', totalVerses: '',
+    totalChapters: '', totalVerses: '', credits: '',
   });
   const [saving, setSaving] = useState(false);
 
@@ -130,7 +132,7 @@ const Admin = () => {
   };
 
   const fetchScriptures = async () => {
-    const { data } = await supabase.from('scriptures').select('id, title, title_hindi, description, description_hindi, category, subcategory, author, language, pdf_url, parent_scripture_id, total_chapters, total_verses').order('created_at', { ascending: false });
+    const { data } = await supabase.from('scriptures').select('id, title, title_hindi, description, description_hindi, category, subcategory, author, language, pdf_url, parent_scripture_id, total_chapters, total_verses, credits').order('created_at', { ascending: false });
     if (data) setScriptures(data);
   };
 
@@ -177,10 +179,11 @@ const Admin = () => {
         pdf_url: urlData.publicUrl, parent_scripture_id: formData.parentScriptureId || null,
         total_chapters: formData.totalChapters ? parseInt(formData.totalChapters) : null,
         total_verses: formData.totalVerses ? parseInt(formData.totalVerses) : null,
+        credits: formData.credits || null,
       });
       if (insertError) throw insertError;
       toast.success('Scripture uploaded successfully!');
-      setFormData({ title: '', titleHindi: '', description: '', descriptionHindi: '', category: '', subcategory: '', author: '', language: 'hindi', parentScriptureId: '', totalChapters: '', totalVerses: '' });
+      setFormData({ title: '', titleHindi: '', description: '', descriptionHindi: '', category: '', subcategory: '', author: '', language: 'hindi', parentScriptureId: '', totalChapters: '', totalVerses: '', credits: '' });
       setPdfFile(null);
       const fileInput = document.getElementById('pdf-file') as HTMLInputElement;
       if (fileInput) fileInput.value = '';
@@ -207,6 +210,7 @@ const Admin = () => {
       parentScriptureId: s.parent_scripture_id || '',
       totalChapters: s.total_chapters?.toString() || '',
       totalVerses: s.total_verses?.toString() || '',
+      credits: s.credits || '',
     });
   };
 
@@ -227,6 +231,7 @@ const Admin = () => {
         parent_scripture_id: editForm.parentScriptureId || null,
         total_chapters: editForm.totalChapters ? parseInt(editForm.totalChapters) : null,
         total_verses: editForm.totalVerses ? parseInt(editForm.totalVerses) : null,
+        credits: editForm.credits || null,
       }).eq('id', editingScripture.id);
       if (error) throw error;
       toast.success('Scripture updated successfully!');
@@ -464,6 +469,10 @@ const Admin = () => {
                     <Label htmlFor="totalVerses">Total Verses</Label>
                     <Input id="totalVerses" type="number" min="0" value={formData.totalVerses} onChange={(e) => setFormData({ ...formData, totalVerses: e.target.value })} placeholder="e.g., 700" />
                   </div>
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="credits">Credits</Label>
+                  <Textarea id="credits" value={formData.credits} onChange={(e) => setFormData({ ...formData, credits: e.target.value })} placeholder="Enter credits / acknowledgements" rows={3} className="resize-none" />
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="pdf-file">PDF File *</Label>
@@ -719,6 +728,10 @@ const Admin = () => {
                 <Label>Total Verses</Label>
                 <Input type="number" min="0" value={editForm.totalVerses} onChange={(e) => setEditForm({ ...editForm, totalVerses: e.target.value })} placeholder="e.g., 700" />
               </div>
+            </div>
+            <div className="space-y-1">
+              <Label>Credits</Label>
+              <Textarea value={editForm.credits} onChange={(e) => setEditForm({ ...editForm, credits: e.target.value })} placeholder="Enter credits / acknowledgements" rows={3} className="resize-none" />
             </div>
           </div>
           <DialogFooter>
