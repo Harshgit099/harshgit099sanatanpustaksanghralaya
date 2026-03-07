@@ -150,7 +150,7 @@ const ResetPassword = () => {
 
             <Button type="submit" className="w-full h-12" disabled={loading}>
               {loading ? (
-                <Loader2 className="w-4 h-4 animate-spin" />
+                <span className="text-lg om-symbol animate-om-spin">ॐ</span>
               ) : (
                 'Update Password'
               )}

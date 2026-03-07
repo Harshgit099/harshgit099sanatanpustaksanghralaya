@@ -171,7 +171,7 @@ const Subscription = () => {
                   <Button type="submit" className="w-full" disabled={submitting}>
                     {submitting ? (
                       <>
-                        <Loader2 className="h-4 w-4 animate-spin mr-2" />
+                        <span className="text-lg om-symbol animate-om-spin">ॐ</span>
                         Submitting...
                       </>
                     ) : (

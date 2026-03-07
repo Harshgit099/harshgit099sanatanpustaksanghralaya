@@ -217,7 +217,7 @@ const Library = () => {
           {/* Results */}
           {loading ? (
             <div className="flex items-center justify-center py-20">
-              <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin" />
+              <span className="text-3xl om-symbol animate-om-spin text-primary">ॐ</span>
             </div>
           ) : scriptures.length === 0 ? (
             <div className="text-center py-20">

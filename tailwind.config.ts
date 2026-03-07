@@ -157,6 +157,7 @@ export default {
         glow: "glow 2s ease-in-out infinite",
         float: "float 3s ease-in-out infinite",
         "spin-slow": "spin-slow 8s linear infinite",
+        "om-spin": "om-spin 2s linear infinite",
       },
     },
   },

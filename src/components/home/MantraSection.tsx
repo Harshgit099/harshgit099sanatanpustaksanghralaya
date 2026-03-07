@@ -38,7 +38,7 @@ const MantraSection = () => {
       <section className="py-20 bg-gradient-to-b from-background to-muted/20">
         <div className="container mx-auto px-4">
           <div className="text-center">
-            <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin mx-auto" />
+            <span className="text-3xl om-symbol animate-om-spin text-primary">ॐ</span>
           </div>
         </div>
       </section>

@@ -333,7 +333,7 @@ const Admin = () => {
   };
 
   if (authLoading || isAuthorized === null) {
-    return <Layout><div className="min-h-screen flex items-center justify-center"><Loader2 className="h-8 w-8 animate-spin text-primary" /></div></Layout>;
+    return <Layout><div className="min-h-screen flex items-center justify-center"><span className="text-3xl om-symbol animate-om-spin text-primary">ॐ</span></div></Layout>;
   }
 
   if (!user || !isAuthorized) {
