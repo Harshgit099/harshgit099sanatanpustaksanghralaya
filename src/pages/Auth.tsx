@@ -316,12 +316,6 @@ const Auth = () => {
           </p>
         </div>
 
-        {/* Back to Home */}
-        <p className="text-center text-sm text-muted-foreground mt-6">
-          <a href="/" className="hover:text-primary transition-colors">
-            ← Back to Home
-          </a>
-        </p>
       </div>
     </div>
   );
