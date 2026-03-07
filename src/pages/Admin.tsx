@@ -209,6 +209,7 @@ const Admin = () => {
       parentScriptureId: s.parent_scripture_id || '',
       totalChapters: s.total_chapters?.toString() || '',
       totalVerses: s.total_verses?.toString() || '',
+      credits: s.credits || '',
     });
   };
 
