@@ -471,6 +471,10 @@ const Admin = () => {
                   </div>
                 </div>
                 <div className="space-y-2">
+                  <Label htmlFor="credits">Credits</Label>
+                  <Textarea id="credits" value={formData.credits} onChange={(e) => setFormData({ ...formData, credits: e.target.value })} placeholder="Enter credits / acknowledgements" rows={3} className="resize-none" />
+                </div>
+                <div className="space-y-2">
                   <Label htmlFor="pdf-file">PDF File *</Label>
                   <div className="flex items-center gap-4">
                     <Input id="pdf-file" type="file" accept=".pdf" onChange={handleFileChange} className="flex-1" />
