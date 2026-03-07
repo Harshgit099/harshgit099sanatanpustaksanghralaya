@@ -266,7 +266,7 @@ const Auth = () => {
                   <p className="text-xs text-destructive">{errors.password}</p>
                 )}
                 {!isLogin && !errors.password && (
-                  <p className="text-xs text-muted-foreground">Password must be 7-9 characters</p>
+                  <p className="text-xs text-muted-foreground">Password must be at least 7 characters</p>
                 )}
               </div>
             )}
